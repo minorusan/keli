@@ -56,6 +56,8 @@ class UnityFaceBridge extends ChangeNotifier {
     _voice.onConnected = (c) { _voiceConnected = c; notifyListeners(); };
     _voice.onChunk = _onVoiceChunk;
     _voice.onSpeaking = (on) { if (!on) _send(FaceProtocol.stop); };
+    // Reply emotion → Unity face mood (facial + body). Logged so it shows in the shared log.
+    _voice.onEmotion = (mood) { AppLog.log('unity', '→setMood $mood'); setMood(mood); };
   }
 
   // ── Maradel voice → Unity ──

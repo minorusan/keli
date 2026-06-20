@@ -29,6 +29,7 @@ class MaradelVoiceClient {
   void Function(VoiceChunk chunk)? onChunk;
   void Function(bool speaking)? onSpeaking;
   void Function(bool connected)? onConnected;
+  void Function(String emotion)? onEmotion;
 
   MaradelVoiceClient() {
     _socket = io.io(
@@ -50,6 +51,13 @@ class MaradelVoiceClient {
     });
     _socket.on('voice:speaking', (d) {
       if (d is Map) onSpeaking?.call(d['on'] == true);
+    });
+    // Reply emotion → drives the Unity face mood (facial + body).
+    _socket.on('voice:emotion', (d) {
+      if (d is Map) {
+        final e = '${d['emotion'] ?? ''}'.trim();
+        if (e.isNotEmpty) onEmotion?.call(e);
+      }
     });
   }
 

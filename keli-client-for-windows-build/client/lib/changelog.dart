@@ -24,6 +24,17 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 48,
+    version: '1.0.48',
+    date: '2026-06-20',
+    title: 'Face shows emotion on spoken replies',
+    body: '''
+The 3D face now reacts with Maradel's **mood**: the app forwards the backend's
+`voice:emotion` to Unity as `setMood`, so spoken replies drive facial + body
+emotion (Unity's mood layer renders it). Logged as `→setMood <mood>`.
+''',
+  ),
+  ChangelogEntry(
     build: 47,
     version: '1.0.47',
     date: '2026-06-20',
