@@ -24,6 +24,23 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 42,
+    version: '1.0.42',
+    date: '2026-06-20',
+    title: 'Mic fix — the real one',
+    body: '''
+The mic recorded but never reached Maradel, and the level meter stayed dead. Root
+cause found: each audio frame crashed an internal step (`Int16List.view` on an
+odd-offset buffer) **before** it was sent — silently, every frame. So nothing was
+transmitted and the VU never moved.
+
+- Copy each frame to a clean, aligned buffer before processing/sending.
+- Read levels with offset-safe `ByteData` (no more crash).
+- Wrapped the audio handler so any future error is logged instead of silently
+  killing the mic.
+''',
+  ),
+  ChangelogEntry(
     build: 40,
     version: '1.0.40',
     date: '2026-06-20',

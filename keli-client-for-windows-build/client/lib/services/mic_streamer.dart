@@ -201,28 +201,32 @@ class MicStreamer extends ChangeNotifier {
   }
 
   // ── mic → WebSocket ──
-  void _onPcm(Uint8List bytes) {
+  void _onPcm(Uint8List raw) {
     if (!_enabled) return;
     _lastChunkMs = DateTime.now().millisecondsSinceEpoch; // recorder delivered → used by the stall check
-    if (!_gotAudio) {
-      _gotAudio = true;
-      _watchdog?.cancel();
-      AppLog.log('mic', 'mic live: first chunk ${bytes.length} bytes');
-    }
-    _level = _rms(bytes);
-    levelVN.value = _level;
-    final ws = _ws;
-    if (ws == null) return; // not connected yet → drop this slice
-    // Send a CONTIGUOUS copy. The recorder hands us Uint8List VIEWS into a shared/reused buffer; adding
-    // a typed-data view to a dart:io WebSocket could transmit nothing or the wrong region on some SDKs
-    // (the bug we chased: client logged "first chunk" + ws.add with no error, yet 0 bytes hit the wire).
-    final out = _maradelSpeaking ? Uint8List(bytes.length) : Uint8List.fromList(bytes);
+    // THE root cause of "records but never sends + VU dead": the recorder hands us Uint8List VIEWS into
+    // a shared buffer with an ARBITRARY byteOffset. _rms did `Int16List.view(bytes.buffer, offset, …)`,
+    // which THROWS when offset is odd (not 2-byte aligned) — crashing _onPcm before ws.add ran, every
+    // frame, silently (a throw in a stream onData isn't routed to onError). Copy to a fresh, 0-offset,
+    // aligned buffer FIRST → safe for both _rms and the WebSocket send. Belt-and-suspenders try/catch so
+    // any future throw is visible instead of silently killing the mic.
     try {
+      final bytes = Uint8List.fromList(raw);
+      if (!_gotAudio) {
+        _gotAudio = true;
+        _watchdog?.cancel();
+        AppLog.log('mic', 'mic live: first chunk ${bytes.length} bytes');
+      }
+      _level = _rms(bytes);
+      levelVN.value = _level;
+      final ws = _ws;
+      if (ws == null) return; // not connected yet → drop this slice
+      final out = _maradelSpeaking ? Uint8List(bytes.length) : bytes; // silence while Maradel talks
       ws.add(out); // binary frame
       _chunksSent++;
       chunksVN.value = _chunksSent;
     } catch (e) {
-      AppLog.log('mic', 'ws write failed: $e');
+      AppLog.log('mic', 'pcm/send error: $e');
       _dropSocket();
     }
   }
@@ -336,12 +340,16 @@ class MicStreamer extends ChangeNotifier {
 
   double _rms(Uint8List bytes) {
     if (bytes.length < 2) return 0;
-    final samples = Int16List.view(bytes.buffer, bytes.offsetInBytes, bytes.length ~/ 2);
+    // ByteData.sublistView + getInt16 reads at ANY byte offset — no 2-byte alignment requirement, so
+    // it never throws on a view buffer (unlike Int16List.view, which crashed _onPcm on odd offsets).
+    final bd = ByteData.sublistView(bytes);
+    final n = bytes.length ~/ 2;
     var sum = 0.0;
-    for (final s in samples) {
+    for (var i = 0; i < n; i++) {
+      final s = bd.getInt16(i * 2, Endian.little);
       sum += s * s;
     }
-    final meanSquare = sum / samples.length;
+    final meanSquare = sum / n;
     if (meanSquare <= 0) return 0;
     return (math.sqrt(meanSquare) / 32768.0).clamp(0.0, 1.0);
   }
