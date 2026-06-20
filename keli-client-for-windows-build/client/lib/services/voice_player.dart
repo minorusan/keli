@@ -19,7 +19,8 @@ import '../face/maradel_voice_client.dart';
 class VoicePlayer extends ChangeNotifier {
   final MaradelVoiceClient _voice = MaradelVoiceClient();
   final AudioPlayer _player = AudioPlayer();
-  final List<String> _queue = [];
+  final List<VoiceChunk> _queue = [];
+  Timer? _advanceTimer; // fallback to advance the queue if onPlayerComplete never fires
   bool _playing = false;
   bool _connected = false;
   bool _speaking = false;
@@ -62,7 +63,7 @@ class VoicePlayer extends ChangeNotifier {
       notifyListeners();
     };
     _voice.onChunk = (chunk) {
-      _queue.add(chunk.absoluteUrl);
+      _queue.add(chunk);
       unawaited(_drain());
     };
     // Reply emotion (:9100 voice:emotion) → drive the embedded Unity face's mood. The main screen has
@@ -75,17 +76,25 @@ class VoicePlayer extends ChangeNotifier {
         AppLog.log('voice', 'setMood send failed: $e');
       }
     };
-    _player.onPlayerComplete.listen((_) {
-      _playing = false;
-      unawaited(_drain());
-      notifyListeners(); // so `busy` flips false when the queue has fully drained (drives mic un-mute)
-    });
+    _player.onPlayerComplete.listen((_) => _advance());
+  }
+
+  /// Move to the next queued chunk. Called by BOTH `onPlayerComplete` and the duration fallback timer —
+  /// whichever fires first wins (the other is canceled), so a missed `onPlayerComplete` (audioplayers
+  /// drops it on rapid stop/play) can never wedge the queue with `_playing` stuck true.
+  void _advance() {
+    _advanceTimer?.cancel();
+    _advanceTimer = null;
+    _playing = false;
+    notifyListeners(); // so `busy` flips false when the queue has fully drained (drives mic un-mute)
+    unawaited(_drain());
   }
 
   Future<void> _drain() async {
     if (_playing || _queue.isEmpty) return;
     _playing = true;
-    final url = _queue.removeAt(0);
+    final chunk = _queue.removeAt(0);
+    final url = chunk.absoluteUrl;
     try {
       await _player.stop();
       await _player.setVolume(_volume);
@@ -93,15 +102,25 @@ class VoicePlayer extends ChangeNotifier {
       _played++;
       AppLog.log('voice', 'playing reply chunk #$_played ($url)');
       notifyListeners();
+      // Fallback: advance after the clip's own length (+margin) in case onPlayerComplete never arrives.
+      // Without this a single dropped completion event freezes ALL subsequent audio (build <=51 bug).
+      _advanceTimer?.cancel();
+      final ms = (((chunk.durationSec > 0 ? chunk.durationSec : 2.0) * 1000) + 800).round();
+      _advanceTimer = Timer(Duration(milliseconds: ms), () {
+        if (_playing) {
+          AppLog.log('voice', 'advance (duration fallback, onComplete missed)');
+          _advance();
+        }
+      });
     } catch (e) {
       AppLog.log('voice', 'play failed: $e');
-      _playing = false;
-      unawaited(_drain()); // skip the bad chunk, keep going
+      _advance(); // skip the bad chunk, keep going
     }
   }
 
   @override
   void dispose() {
+    _advanceTimer?.cancel();
     _voice.dispose();
     _player.dispose();
     super.dispose();

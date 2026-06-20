@@ -37,6 +37,10 @@ class KeliConnection extends ChangeNotifier {
   String get url => kKeliUrl;
   String get deviceId => _deviceId;
 
+  /// The live backend socket — shared so other services (e.g. [MaradelSession]) can add their own
+  /// listeners to the SAME connection instead of opening a second one (per the chat-view contract).
+  io.Socket get socket => _socket;
+
   Future<void> setDeviceId(String id) async {
     _deviceId = id.trim().isEmpty ? 'a-phone' : id.trim();
     notifyListeners();

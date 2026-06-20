@@ -17,6 +17,7 @@ import '../services/unity_bridge.dart';
 import '../theme.dart';
 import '../widgets/registration_dialog.dart';
 import '../widgets/skin_picker.dart';
+import '../widgets/maradel_chat_window.dart';
 import '../widgets/mic_status_bar.dart';
 import '../widgets/perception_window.dart';
 import '../widgets/tapo_cam_window.dart';
@@ -36,6 +37,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   IncomingCommand? _selfAction; // a user-launched action being composed (self-invoke)
   bool _regShown = false; // first-launch registration popup shown this session
+  bool _showChat = false; // the floating read-only Maradel chat window (off by default)
 
   // THE single embedded Unity view. A GlobalKey lets us move it between the full-screen stage and the
   // small corner overlay (during tool popups) WITHOUT reparenting recreating it (Unity stays warm).
@@ -241,6 +243,13 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.face_retouching_natural, color: KeliTheme.accent),
             onPressed: () => showSkinPicker(context),
           ),
+          // Toggle the floating read-only Maradel chat window (off by default).
+          IconButton(
+            tooltip: _showChat ? 'Hide Maradel chat' : 'Show Maradel chat',
+            icon: Icon(_showChat ? Icons.chat_bubble : Icons.chat_bubble_outline,
+                color: _showChat ? KeliTheme.accent : KeliTheme.muted),
+            onPressed: () => setState(() => _showChat = !_showChat),
+          ),
           // Quick "ears" toggle — stream the mic to Maradel (the robot's ears).
           Consumer<MicStreamer>(
             builder: (_, mic, _) => IconButton(
@@ -302,6 +311,8 @@ class _HomeScreenState extends State<HomeScreen> {
           const TapoCamWindow(),
           // What Maradel currently sees + where she thinks she is (perception loop), top-right.
           const PerceptionWindow(),
+          // Read-only Maradel chat mirror — draggable floating window, top-right; toggled from the AppBar.
+          if (_showChat && !overlayUp) const MaradelChatWindow(),
           // Interactive request from Maradel — one at a time over a scrim.
           if (conn.activeRequest != null)
             _RequestOverlay(
@@ -400,13 +411,52 @@ class _FaceStage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // No glow/halo around the face — clean black, per request (the teal-green glow read
-                // as a "green overlay" around the Unity widget).
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: SizedBox(width: side, height: side, child: face),
+                // Face square flanked by the big ◀/▶ avatar switchers (overlaid on the side edges).
+                SizedBox(
+                  width: side,
+                  height: side,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // No glow/halo around the face — clean black, per request (the teal-green glow
+                      // read as a "green overlay" around the Unity widget).
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: SizedBox(width: side, height: side, child: face),
+                      ),
+                      Positioned(left: 6, child: _AvatarNavButton(icon: Icons.chevron_left, onTap: () => context.read<UnityBridge>().prevSkin())),
+                      Positioned(right: 6, child: _AvatarNavButton(icon: Icons.chevron_right, onTap: () => context.read<UnityBridge>().nextSkin())),
+                    ],
                   ),
+                ),
                 const SizedBox(height: 10),
+                // Current avatar name + category (Flutter-owned index; Unity stays in sync).
+                Consumer<UnityBridge>(
+                  builder: (_, bridge, _) {
+                    final a = bridge.currentSkin;
+                    if (a == null) {
+                      return const Text('loading avatar…',
+                          style: TextStyle(color: KeliTheme.muted, fontSize: 13, fontWeight: FontWeight.w600));
+                    }
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          a.display,
+                          style: const TextStyle(color: KeliTheme.text, fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.3),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          bridge.total > 0
+                              ? '${a.category.isEmpty ? "—" : a.category} · ${bridge.index + 1}/${bridge.total}'
+                              : (a.category.isEmpty ? '' : a.category),
+                          style: const TextStyle(color: KeliTheme.muted, fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.5),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -422,6 +472,35 @@ class _FaceStage extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+/// A big, glowing circular ◀/▶ button used to step the face's avatar (sized for a wall tablet).
+class _AvatarNavButton extends StatelessWidget {
+  const _AvatarNavButton({required this.icon, required this.onTap});
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Container(
+          width: 64,
+          height: 64,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: KeliTheme.bg.withValues(alpha: 0.55),
+            border: Border.all(color: KeliTheme.accent.withValues(alpha: 0.6), width: 2),
+            boxShadow: KeliTheme.glow(blur: 10, alpha: 0.3),
+          ),
+          child: Icon(icon, color: KeliTheme.accent, size: 40),
+        ),
       ),
     );
   }

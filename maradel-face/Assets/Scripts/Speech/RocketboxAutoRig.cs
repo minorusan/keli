@@ -73,7 +73,8 @@ namespace Maradel.Speech
         Vector2 _listScroll;
         bool _cacheOpen;            // detailed cache overlay open
         Vector2 _cacheScroll;
-        bool _overlayOpen = true;   // whole overlay shown vs collapsed to a small button
+        bool _overlayOpen = false;  // dev overlay HIDDEN by default (collapsed to the small "≡" button);
+                                    // avatar control now lives in the Flutter UI (◀/▶ + picker)
         bool _bodyView;             // false = FACE perspective, true = BODY (full-body) perspective
         bool _snapBody;             // Save Camera tags snapshot as "body" (true) or "face" (false)
         int _faceEmoIndex;          // manual-test FACE picker (index into ExpressionController.EmotionIds)
@@ -651,6 +652,23 @@ namespace Maradel.Speech
 #endif
         }
 
+        // ── current avatar → Flutter (drives the ◀/▶ label: name + category) ──
+        [System.Serializable] class AvatarInfo { public string name; public string file; public string category; public int index; public int total; }
+
+        /// <summary>Tell Flutter which avatar is now showing, so its ◀/▶ control can label it
+        /// (name + category) and the picker can mark the active one. Fired on every load/wire.</summary>
+        void EmitAvatarInfo()
+        {
+            int total = _avatarPaths != null ? _avatarPaths.Count : 0;
+            string key = (total > 0 && _avatarIndex >= 0 && _avatarIndex < total) ? _avatarPaths[_avatarIndex] : null;
+            string file = key != null ? System.IO.Path.GetFileName(key)
+                        : (_avatar != null ? _avatar.name.Replace("(Clone)", "") : "");
+            string cat = key != null ? CategoryOfKey(key) : "";
+            Maradel.Bridge.FlutterControlBridge.Emit("avatar",
+                new AvatarInfo { name = file, file = file, category = cat, index = _avatarIndex, total = total });
+            Debug.Log($"[BRIDGE] -> flutter: avatar '{file}' ({cat}) {_avatarIndex + 1}/{total}", this);
+        }
+
         /// <summary>Load the skin whose real (file) name matches <paramref name="name"/>.</summary>
         public void SetSkinByName(string name)
         {
@@ -980,6 +998,7 @@ namespace Maradel.Speech
                 L("LipSyncController (re)wired for current avatar", this);
             }
 #endif
+            EmitAvatarInfo(); // → Flutter ◀/▶ label (name + category) + picker active mark
         }
 
         /// <summary>AUTOZOOM (from calibration): face the avatar at the camera and snap Camera.main to a

@@ -7,6 +7,7 @@ import 'config.dart';
 import 'screens/home_screen.dart';
 import 'services/keli_connection.dart';
 import 'services/keli_settings.dart';
+import 'services/maradel_session.dart';
 import 'services/mic_streamer.dart';
 import 'services/unity_bridge.dart';
 import 'services/voice_player.dart';
@@ -38,8 +39,15 @@ class KeliApp extends StatelessWidget {
           create: (_) => KeliSettings(),
           update: (_, conn, s) => (s ?? KeliSettings())..onVolumeCommand(conn.pendingVolume),
         ),
-        // Flutter↔Unity bridge (skin list + set_skin + generic messages).
-        ChangeNotifierProvider(create: (_) => UnityBridge()),
+        // Flutter↔Unity bridge (skin list + set_skin + avatar index). init() restores the persisted
+        // avatar and asks Unity for the skin list at startup.
+        ChangeNotifierProvider(create: (_) => UnityBridge()..init()),
+        // Read-only mirror of the live Maradel session (floating chat window). Binds to the SAME
+        // backend socket as KeliConnection and pulls GET /session for the initial load.
+        ChangeNotifierProxyProvider<KeliConnection, MaradelSession>(
+          create: (_) => MaradelSession(),
+          update: (_, conn, s) => (s ?? MaradelSession())..bind(conn.socket),
+        ),
         // The robot's "mouth": plays Maradel's reply on the tablet (:9100 voice:chunk) and exposes
         // the real `voice:speaking` flag. Master volume comes from the per-Keli config.
         ChangeNotifierProxyProvider<KeliSettings, VoicePlayer>(

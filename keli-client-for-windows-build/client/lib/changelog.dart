@@ -24,6 +24,24 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 56,
+    version: '1.0.56',
+    date: '2026-06-20',
+    title: 'Avatar ◀/▶ that stick + a live Maradel chat view + audio fix',
+    body: '''
+- **Avatar ◀/▶ right on the face** flip to the next/previous look, show its name + category, and
+  **remember your pick** across restarts — no menu needed. The in-Unity dev overlay is hidden by
+  default now (Flutter owns avatar switching). Fixed an early-startup bug where the buttons did
+  nothing until you opened the picker.
+- New **MARADEL chat window**: a read-only, draggable mirror of the live session — your messages,
+  Maradel's replies (markdown), and her **tool calls** (status, progress notes, collapsible output).
+  Toggled from the chat icon in the top bar (off by default); auto-scrolls. It fills in once the
+  backend's live session feed is switched on.
+- Fixed spoken replies **cutting out after a sentence or two** — the player could stall after a chunk
+  if its finish event got dropped; it now always advances to the next.
+''',
+  ),
+  ChangelogEntry(
     build: 53,
     version: '1.0.53',
     date: '2026-06-20',
