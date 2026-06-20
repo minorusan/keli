@@ -204,6 +204,23 @@ class KeliSettings extends ChangeNotifier {
     }
   }
 
+  /// Set the master volume immediately (0..1). Applies to the app audio (via the VoicePlayer proxy on
+  /// notify) AND writes keli_config.json, which the embedded Unity reads (KeliConfigVolume →
+  /// AudioListener.volume). Used by the `set_volume` command.
+  void setVolume(double v) {
+    final clamped = v.clamp(0.0, 1.0);
+    AppLog.log('keli', 'set_volume → $clamped');
+    _applyConfig({'volume': clamped}, cacheBody: '{"volume":$clamped}');
+  }
+
+  /// React to a `set_volume` command relayed from KeliConnection (null = none / already applied).
+  void onVolumeCommand(double? v) {
+    if (v == null) return;
+    final clamped = v.clamp(0.0, 1.0);
+    if ((clamped - _volume).abs() < 0.001) return; // already at this volume
+    setVolume(clamped);
+  }
+
   @override
   void dispose() {
     _configTimer?.cancel();

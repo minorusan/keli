@@ -36,6 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
   IncomingCommand? _selfAction; // a user-launched action being composed (self-invoke)
   bool _regShown = false; // first-launch registration popup shown this session
 
+  // THE single embedded Unity view. A GlobalKey lets us move it between the full-screen stage and the
+  // small corner overlay (during tool popups) WITHOUT reparenting recreating it (Unity stays warm).
+  final GlobalKey _faceKey = GlobalKey();
+  Widget? _faceCached;
+  Widget get _face => _faceCached ??= EmbedUnity(
+        key: _faceKey,
+        onMessageFromUnity: (message) => context.read<UnityBridge>().onUnityMessage(message),
+      );
+
   @override
   void initState() {
     super.initState();
@@ -269,9 +278,9 @@ class _HomeScreenState extends State<HomeScreen> {
           // Solid black behind the Unity face — clean black frame around the square, seamless with
           // Unity's own black clear colour (the face floats on black).
           const Positioned.fill(child: ColoredBox(color: Colors.black)),
-          // Maradel's 3D face — always on, centered, square. Unity connects to Maradel (:9100)
-          // and fetches/plays the voice WAVs itself (it does HTTP), so lipsync needs no Flutter bridge.
-          _FaceStage(conn: conn),
+          // Maradel's 3D face — full-screen square when no popup is up. When a tool popup covers the
+          // screen, it moves to the top-right corner overlay below (same single Unity view).
+          if (!overlayUp) _FaceStage(conn: conn, face: _face),
           if (conn.commands.isNotEmpty)
             SafeArea(
               child: ListView(
@@ -305,6 +314,25 @@ class _HomeScreenState extends State<HomeScreen> {
               command: _selfAction!,
               onComplete: _completeSelf,
             ),
+          // Tool popup up → keep the face visible as a small TOP-RIGHT overlay (Tapo cam is top-left).
+          // Same single Unity view, reparented here via its GlobalKey (no reload).
+          if (overlayUp)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: SizedBox.square(
+                      dimension: (MediaQuery.of(context).size.shortestSide * 0.3).clamp(120.0, 240.0),
+                      child: _face,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           // Live "ears" status bar (voice meter + connection + chunks + expandable log).
           const Align(alignment: Alignment.bottomCenter, child: MicStatusBar()),
         ],
@@ -322,6 +350,10 @@ class _RequestOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Front flashlight: the screen IS the light → render edge-to-edge white, no scrim / width cap.
+    if (command.event == 'front_flashlight') {
+      return Positioned.fill(child: buildRequestView(context, command, onComplete));
+    }
     final h = MediaQuery.of(context).size.height;
     return Container(
       color: Colors.black87,
@@ -348,8 +380,9 @@ class _RequestOverlay extends StatelessWidget {
 /// Maradel (:9100) over Socket.IO and fetches the voice WAVs over HTTP, so the face talks + lipsyncs
 /// with no Flutter-side bridge. A small status line under the square keeps the Keli link visible.
 class _FaceStage extends StatelessWidget {
-  const _FaceStage({required this.conn});
+  const _FaceStage({required this.conn, required this.face});
   final KeliConnection conn;
+  final Widget face; // the single shared EmbedUnity (see _HomeScreenState._face)
 
   @override
   Widget build(BuildContext context) {
@@ -368,16 +401,7 @@ class _FaceStage extends StatelessWidget {
                 // as a "green overlay" around the Unity widget).
                 ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: SizedBox(
-                      width: side,
-                      height: side,
-                      // The embedded Unity view (flutter_embed_unity). Unity drives its own voice/
-                      // lipsync; we only log any messages it chooses to emit back.
-                      child: EmbedUnity(
-                        // Unity→Flutter messages → the bridge (logs them + parses skin replies).
-                        onMessageFromUnity: (message) => context.read<UnityBridge>().onUnityMessage(message),
-                      ),
-                    ),
+                    child: SizedBox(width: side, height: side, child: face),
                   ),
                 const SizedBox(height: 10),
                 Row(

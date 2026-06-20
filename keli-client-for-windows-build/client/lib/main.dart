@@ -33,7 +33,11 @@ class KeliApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => KeliConnection()),
         // Per-Keli identity/config (registration, 60s config poll, 10s log batching, master volume).
-        ChangeNotifierProvider(create: (_) => KeliSettings()),
+        // Proxied on KeliConnection so a `set_volume` command is applied immediately.
+        ChangeNotifierProxyProvider<KeliConnection, KeliSettings>(
+          create: (_) => KeliSettings(),
+          update: (_, conn, s) => (s ?? KeliSettings())..onVolumeCommand(conn.pendingVolume),
+        ),
         // Flutter↔Unity bridge (skin list + set_skin + generic messages).
         ChangeNotifierProvider(create: (_) => UnityBridge()),
         // The robot's "mouth": plays Maradel's reply on the tablet (:9100 voice:chunk) and exposes

@@ -25,6 +25,8 @@ class KeliConnection extends ChangeNotifier {
   String _deviceId = 'roomba-phone';
   bool _connected = false;
   String _detail = 'connecting…';
+  double? _pendingVolume; // last `set_volume` command value (consumed by KeliSettings via the proxy)
+  double? get pendingVolume => _pendingVolume;
   final List<IncomingCommand> _commands = []; // push windows, newest first
   final List<IncomingCommand> _requests = []; // interactive requests, FIFO (active = first)
 
@@ -130,6 +132,17 @@ class KeliConnection extends ChangeNotifier {
     for (final event in requestEvents()) {
       _socket.on(event, (data) => _onRequest(event, data));
     }
+
+    // Master-volume command (Maradel → set this Keli's volume). Applied by KeliSettings (which also
+    // writes keli_config.json for the embedded Unity).
+    _socket.on('set_volume', (data) {
+      final raw = data is Map ? (data['volume'] ?? data['value']) : data;
+      final v = raw is num ? raw.toDouble() : double.tryParse('$raw');
+      if (v == null) return;
+      _pendingVolume = v;
+      AppLog.log('conn', 'set_volume → $v');
+      notifyListeners();
+    });
 
     _socket.connect();
   }

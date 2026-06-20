@@ -59,6 +59,13 @@ shows status + scale controls. THIS IS THE KNOWN-GOOD STATE.
 
 ## Change log
 
+- **`set_volume` → master volume (Unity reads it).** Maradel emits a `set_volume` command (Keli `:9120`
+  socket); the Flutter app (`KeliSettings.setVolume`) applies it to its own audio AND writes the master
+  `volume` into `keli_config.json` in the app's external files dir. `Common/KeliConfigVolume.cs` already
+  watches that file and applies `volume` to `AudioListener.volume`, so the embedded face follows the same
+  master volume. (Path:
+  `/storage/emulated/0/Android/data/com.example.keli_client/files/keli_config.json`.)
+
 - **Lip-sync from the streaming `voice:chunk` (confirmed root cause of the frozen mouth).** Unity log
   piping revealed `[MaradelVoice] chunk … — ignored (voice:plan owns audio)` + `viseme dominant=Sil`.
   The mic voice-loop streams the reply as `voice:chunk` and never sends `voice:plan`, so the old

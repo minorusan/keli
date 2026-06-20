@@ -24,6 +24,19 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 49,
+    version: '1.0.49',
+    date: '2026-06-20',
+    title: 'set_volume + full-screen flashlight + face stays visible',
+    body: '''
+- **`set_volume` command** — Maradel can set this device's **master volume**; it applies to the app
+  audio and the 3D face (written to the shared config Unity reads).
+- **Front flashlight** is now truly **full-screen white** (was a centred card on a dim scrim).
+- **The face stays visible during pop-ups** — when a tool opens a window, Maradel's face tucks into the
+  **top-right corner** (like the camera window, opposite side) instead of being hidden behind it.
+''',
+  ),
+  ChangelogEntry(
     build: 48,
     version: '1.0.48',
     date: '2026-06-20',
