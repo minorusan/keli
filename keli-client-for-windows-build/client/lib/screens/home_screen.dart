@@ -69,12 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxHeight: size.height * 0.85),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(bottom: 14),
                     child: Text('Send to Maradel',
                         style: TextStyle(color: KeliTheme.text, fontSize: 16, fontWeight: FontWeight.w700)),
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisSpacing: 12,
                     crossAxisSpacing: 12,
                     childAspectRatio: 1.05,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
                       _action(ctx, Icons.keyboard, 'Text', () => _startSelf('input_string', {'prompt': 'Send to Maradel', 'timeoutMs': 300000})),
                       _action(ctx, Icons.camera_front, 'Front', () => _startSelf('take_photo', {'camera': 'front', 'timeoutMs': 15000})),
@@ -124,8 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, color: KeliTheme.accent, size: 46),
-              const SizedBox(height: 10),
-              Text(label, textAlign: TextAlign.center, style: const TextStyle(color: KeliTheme.text, fontSize: 15, fontWeight: FontWeight.w600)),
+              SizedBox(height: 10),
+              Text(label, textAlign: TextAlign.center, style: TextStyle(color: KeliTheme.text, fontSize: 15, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -192,12 +192,12 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: KeliTheme.surface,
-        title: const Text('Bridge → Unity', style: TextStyle(color: KeliTheme.accent)),
+        title: Text('Bridge → Unity', style: TextStyle(color: KeliTheme.accent)),
         content: TextField(
           controller: ctrl,
           autofocus: true,
-          style: const TextStyle(color: KeliTheme.text),
-          decoration: const InputDecoration(
+          style: TextStyle(color: KeliTheme.text),
+          decoration: InputDecoration(
             hintText: 'message → Unity console',
             hintStyle: TextStyle(color: KeliTheme.muted),
           ),
@@ -207,13 +207,13 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Close', style: TextStyle(color: KeliTheme.muted))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Close', style: TextStyle(color: KeliTheme.muted))),
           TextButton(
             onPressed: () {
               send();
               Navigator.pop(ctx);
             },
-            child: const Text('Send', style: TextStyle(color: KeliTheme.accent)),
+            child: Text('Send', style: TextStyle(color: KeliTheme.accent)),
           ),
         ],
       ),
@@ -235,12 +235,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.black, // black behind the embedded Unity face
       appBar: AppBar(
-        title: const Text('Keli', style: TextStyle(letterSpacing: 2, fontWeight: FontWeight.w700)),
+        title: Text('Keli', style: TextStyle(letterSpacing: 2, fontWeight: FontWeight.w700)),
         actions: [
           // Choose the 3D face avatar/skin (asks Unity for the list → searchable picker).
           IconButton(
             tooltip: 'Choose avatar / skin',
-            icon: const Icon(Icons.face_retouching_natural, color: KeliTheme.accent),
+            icon: Icon(Icons.face_retouching_natural, color: KeliTheme.accent),
             onPressed: () => showSkinPicker(context),
           ),
           // Toggle the floating read-only Maradel chat window (off by default).
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (conn.commands.isNotEmpty)
             IconButton(
               tooltip: 'Close all',
-              icon: const Icon(Icons.clear_all, color: KeliTheme.accent),
+              icon: Icon(Icons.clear_all, color: KeliTheme.accent),
               onPressed: conn.dismissAll,
             ),
         ],
@@ -280,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: KeliTheme.accent,
                 foregroundColor: KeliTheme.bg,
                 onPressed: _openActions,
-                child: const Icon(Icons.add, size: 24),
+                child: Icon(Icons.add, size: 24),
               ),
             ),
       body: Stack(
@@ -294,13 +294,13 @@ class _HomeScreenState extends State<HomeScreen> {
           if (conn.commands.isNotEmpty)
             SafeArea(
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(14, 14, 14, 28),
+                padding: EdgeInsets.fromLTRB(14, 14, 14, 28),
                 children: [
                   // Cap width + center so popups don't span a wide landscape screen.
                   for (final cmd in conn.commands)
                     Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 600),
+                        constraints: BoxConstraints(maxWidth: 600),
                         child: buildCommandView(context, cmd, () => conn.dismiss(cmd.id)),
                       ),
                     ),
@@ -336,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
               right: 0,
               child: SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: EdgeInsets.all(8),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: SizedBox.square(
@@ -378,7 +378,7 @@ class _RequestOverlay extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600, maxHeight: h),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               child: buildRequestView(context, command, onComplete),
             ),
           ),
@@ -429,13 +429,13 @@ class _FaceStage extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 // Current avatar name + category (Flutter-owned index; Unity stays in sync).
                 Consumer<UnityBridge>(
                   builder: (_, bridge, _) {
                     final a = bridge.currentSkin;
                     if (a == null) {
-                      return const Text('loading avatar…',
+                      return Text('loading avatar…',
                           style: TextStyle(color: KeliTheme.muted, fontSize: 13, fontWeight: FontWeight.w600));
                     }
                     return Column(
@@ -443,25 +443,25 @@ class _FaceStage extends StatelessWidget {
                       children: [
                         Text(
                           a.display,
-                          style: const TextStyle(color: KeliTheme.text, fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.3),
+                          style: TextStyle(color: KeliTheme.text, fontSize: 16, fontWeight: FontWeight.w700, letterSpacing: 0.3),
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2),
                         Text(
                           bridge.total > 0
                               ? '${a.category.isEmpty ? "—" : a.category} · ${bridge.index + 1}/${bridge.total}'
                               : (a.category.isEmpty ? '' : a.category),
-                          style: const TextStyle(color: KeliTheme.muted, fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.5),
+                          style: TextStyle(color: KeliTheme.muted, fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.5),
                         ),
                       ],
                     );
                   },
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(ok ? Icons.cloud_done_rounded : Icons.cloud_off_rounded, size: 16, color: color),
-                    const SizedBox(width: 6),
+                    SizedBox(width: 6),
                     Text(
                       ok ? 'Maradel · connected' : 'connecting…',
                       style: TextStyle(color: color, fontSize: 13, fontWeight: FontWeight.w700, letterSpacing: 0.5),
@@ -489,7 +489,7 @@ class _AvatarNavButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        customBorder: const CircleBorder(),
+        customBorder: CircleBorder(),
         child: Container(
           width: 64,
           height: 64,
@@ -513,24 +513,24 @@ class _SidePanel extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: KeliTheme.surface,
-        title: const Text('Report a bug', style: TextStyle(color: KeliTheme.accent)),
+        title: Text('Report a bug', style: TextStyle(color: KeliTheme.accent)),
         content: TextField(
           controller: ctrl,
           autofocus: true,
           minLines: 1,
           maxLines: 4,
-          style: const TextStyle(color: KeliTheme.text),
-          decoration: const InputDecoration(hintText: 'What went wrong?', hintStyle: TextStyle(color: KeliTheme.muted)),
+          style: TextStyle(color: KeliTheme.text),
+          decoration: InputDecoration(hintText: 'What went wrong?', hintStyle: TextStyle(color: KeliTheme.muted)),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel', style: TextStyle(color: KeliTheme.muted))),
-          TextButton(onPressed: () => Navigator.pop(ctx, ctrl.text), child: const Text('Send', style: TextStyle(color: KeliTheme.accent))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Cancel', style: TextStyle(color: KeliTheme.muted))),
+          TextButton(onPressed: () => Navigator.pop(ctx, ctrl.text), child: Text('Send', style: TextStyle(color: KeliTheme.accent))),
         ],
       ),
     );
     if (reason == null || reason.trim().isEmpty || !context.mounted) return;
     final messenger = ScaffoldMessenger.of(context);
-    messenger.showSnackBar(const SnackBar(content: Text('Capturing bug report…')));
+    messenger.showSnackBar(SnackBar(content: Text('Capturing bug report…')));
     final ok = await conn.reportBug(reason.trim());
     messenger.showSnackBar(SnackBar(content: Text(ok ? '🐞 Bug report saved' : 'Could not save report')));
   }
@@ -541,18 +541,18 @@ class _SidePanel extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: KeliTheme.surface,
-        title: const Text('Request a feature', style: TextStyle(color: KeliTheme.accent)),
+        title: Text('Request a feature', style: TextStyle(color: KeliTheme.accent)),
         content: TextField(
           controller: ctrl,
           autofocus: true,
           minLines: 2,
           maxLines: 5,
-          style: const TextStyle(color: KeliTheme.text),
-          decoration: const InputDecoration(hintText: 'What should it do?', hintStyle: TextStyle(color: KeliTheme.muted)),
+          style: TextStyle(color: KeliTheme.text),
+          decoration: InputDecoration(hintText: 'What should it do?', hintStyle: TextStyle(color: KeliTheme.muted)),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel', style: TextStyle(color: KeliTheme.muted))),
-          TextButton(onPressed: () => Navigator.pop(ctx, ctrl.text), child: const Text('Send', style: TextStyle(color: KeliTheme.accent))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Cancel', style: TextStyle(color: KeliTheme.muted))),
+          TextButton(onPressed: () => Navigator.pop(ctx, ctrl.text), child: Text('Send', style: TextStyle(color: KeliTheme.accent))),
         ],
       ),
     );
@@ -569,17 +569,17 @@ class _SidePanel extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: KeliTheme.surface,
-        title: const Text('Device name', style: TextStyle(color: KeliTheme.accent)),
+        title: Text('Device name', style: TextStyle(color: KeliTheme.accent)),
         content: TextField(
           controller: ctrl,
           autofocus: true,
-          style: const TextStyle(color: KeliTheme.text),
-          decoration: const InputDecoration(hintText: 'e.g. roomba-phone', hintStyle: TextStyle(color: KeliTheme.muted)),
+          style: TextStyle(color: KeliTheme.text),
+          decoration: InputDecoration(hintText: 'e.g. roomba-phone', hintStyle: TextStyle(color: KeliTheme.muted)),
           onSubmitted: (s) => Navigator.pop(ctx, s),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel', style: TextStyle(color: KeliTheme.muted))),
-          TextButton(onPressed: () => Navigator.pop(ctx, ctrl.text), child: const Text('Save', style: TextStyle(color: KeliTheme.accent))),
+          TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Cancel', style: TextStyle(color: KeliTheme.muted))),
+          TextButton(onPressed: () => Navigator.pop(ctx, ctrl.text), child: Text('Save', style: TextStyle(color: KeliTheme.accent))),
         ],
       ),
     );
@@ -605,125 +605,125 @@ class _SidePanel extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(20, 18, 20, 8),
               child: Text('Keli', style: TextStyle(color: KeliTheme.accent, fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 2)),
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Text("Maradel's window on this phone", style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
               leading: Icon(conn.connected ? Icons.cloud_done_rounded : Icons.cloud_off_rounded,
                   color: conn.connected ? KeliTheme.accent : KeliTheme.danger),
-              title: Text(conn.connected ? 'Connected' : 'Disconnected', style: const TextStyle(color: KeliTheme.text, fontSize: 14)),
-              subtitle: Text(conn.url, style: const TextStyle(color: KeliTheme.muted, fontSize: 11)),
+              title: Text(conn.connected ? 'Connected' : 'Disconnected', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text(conn.url, style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             // "Ears": stream the tablet mic to Maradel so you can talk to the robot.
             SwitchListTile(
               activeThumbColor: KeliTheme.accent,
               secondary: Icon(mic.enabled ? Icons.mic : Icons.mic_off,
                   color: mic.enabled ? KeliTheme.accent : KeliTheme.muted),
-              title: const Text('Ears (mic → Maradel)', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              title: Text('Ears (mic → Maradel)', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
               subtitle: Text(
                 mic.enabled
                     ? (mic.connected ? 'streaming → ${mic.target}' : mic.detail)
                     : "off — the robot can't hear you",
-                style: const TextStyle(color: KeliTheme.muted, fontSize: 11),
+                style: TextStyle(color: KeliTheme.muted, fontSize: 11),
               ),
               value: mic.enabled,
               onChanged: (v) => context.read<MicStreamer>().setEnabled(v),
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
-              leading: const Icon(Icons.face_retouching_natural_outlined, color: KeliTheme.accent),
-              title: const Text('Face (preview)', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
-              subtitle: const Text('the 3D talking face — bridge live, Unity pending',
+              leading: Icon(Icons.face_retouching_natural_outlined, color: KeliTheme.accent),
+              title: Text('Face (preview)', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text('the 3D talking face — bridge live, Unity pending',
                   style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
-              trailing: const Icon(Icons.chevron_right, color: KeliTheme.muted),
+              trailing: Icon(Icons.chevron_right, color: KeliTheme.muted),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const FaceScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => FaceScreen()));
               },
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
-              leading: const Icon(Icons.report_problem_outlined, color: KeliTheme.danger),
-              title: const Text('Report a bug', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
-              subtitle: const Text('captures app logs + sends to Maradel', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+              leading: Icon(Icons.report_problem_outlined, color: KeliTheme.danger),
+              title: Text('Report a bug', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text('captures app logs + sends to Maradel', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
               onTap: () {
                 Navigator.of(context).pop();
                 _reportBug(context, conn);
               },
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
-              leading: const Icon(Icons.upload_file, color: KeliTheme.accent),
-              title: const Text('Upload logs', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
-              subtitle: const Text('send this session log to the share (keli/logs/)', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+              leading: Icon(Icons.upload_file, color: KeliTheme.accent),
+              title: Text('Upload logs', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text('send this session log to the share (keli/logs/)', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
               onTap: () async {
                 final messenger = ScaffoldMessenger.of(context);
                 final settings = context.read<KeliSettings>();
                 Navigator.of(context).pop();
-                messenger.showSnackBar(const SnackBar(content: Text('Uploading logs…')));
+                messenger.showSnackBar(SnackBar(content: Text('Uploading logs…')));
                 final err = await settings.uploadLogsToShare();
                 messenger.showSnackBar(SnackBar(content: Text(err ?? 'Logs uploaded to share (keli/logs/)')));
               },
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
-              leading: const Icon(Icons.lightbulb_outline, color: KeliTheme.accent),
-              title: const Text('Request a feature', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
-              subtitle: const Text('a wish → Maradel', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+              leading: Icon(Icons.lightbulb_outline, color: KeliTheme.accent),
+              title: Text('Request a feature', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text('a wish → Maradel', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
               onTap: () {
                 Navigator.of(context).pop();
                 _requestFeature(context, conn);
               },
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
-              leading: const Icon(Icons.badge_outlined, color: KeliTheme.accent),
-              title: const Text('Device name', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
-              subtitle: Text(conn.deviceId, style: const TextStyle(color: KeliTheme.muted, fontSize: 11)),
-              trailing: const Icon(Icons.edit, color: KeliTheme.muted, size: 18),
+              leading: Icon(Icons.badge_outlined, color: KeliTheme.accent),
+              title: Text('Device name', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text(conn.deviceId, style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+              trailing: Icon(Icons.edit, color: KeliTheme.muted, size: 18),
               onTap: () => _editDeviceId(context, conn),
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
-              leading: const Icon(Icons.app_registration, color: KeliTheme.accent),
-              title: const Text('Registration', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              leading: Icon(Icons.app_registration, color: KeliTheme.accent),
+              title: Text('Registration', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
               subtitle: Text(
                 settings.registered
                     ? '${settings.instanceName.isEmpty ? "registered" : settings.instanceName} · vol ${(settings.volume * 100).round()}%'
                     : 'not registered — tap to set up',
-                style: const TextStyle(color: KeliTheme.muted, fontSize: 11),
+                style: TextStyle(color: KeliTheme.muted, fontSize: 11),
               ),
-              trailing: const Icon(Icons.chevron_right, color: KeliTheme.muted),
+              trailing: Icon(Icons.chevron_right, color: KeliTheme.muted),
               onTap: () {
                 Navigator.of(context).pop();
                 showRegistrationDialog(context, dismissible: true);
               },
             ),
-            const Divider(color: KeliTheme.surface2),
+            Divider(color: KeliTheme.surface2),
             ListTile(
-              leading: const Icon(Icons.history_edu_outlined, color: KeliTheme.accent),
-              title: const Text('Changelogs', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
-              subtitle: const Text("what changed each build", style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+              leading: Icon(Icons.history_edu_outlined, color: KeliTheme.accent),
+              title: Text('Changelogs', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text("what changed each build", style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
               onTap: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ChangelogsPage()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => ChangelogsPage()));
               },
             ),
-            const Divider(color: KeliTheme.surface2),
-            const Padding(
+            Divider(color: KeliTheme.surface2),
+            Padding(
               padding: EdgeInsets.fromLTRB(18, 8, 18, 4),
               child: Text('VERSION', style: TextStyle(color: KeliTheme.muted, fontSize: 11, letterSpacing: 2, fontWeight: FontWeight.w700)),
             ),
-            const UpdateButton(),
-            const Spacer(),
-            const Padding(
+            UpdateButton(),
+            Spacer(),
+            Padding(
               padding: EdgeInsets.all(16),
               child: Text('v$kAppVersion (build $kAppBuild)', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
             ),

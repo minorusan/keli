@@ -88,7 +88,7 @@ class KeliConnection extends ChangeNotifier {
           .post(
             Uri.parse('$kKeliUrl/send'),
             headers: const {'content-type': 'application/json'},
-            body: jsonEncode({'deviceId': _deviceId, if (text != null) 'text': text, if (attachments != null) 'attachments': attachments}),
+            body: jsonEncode({'deviceId': _deviceId, 'text': ?text, 'attachments': ?attachments}),
           )
           .timeout(const Duration(seconds: 20));
       return res.statusCode >= 200 && res.statusCode < 300;

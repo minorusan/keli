@@ -87,15 +87,15 @@ class _DraggableWindowState extends State<DraggableWindow> {
   Widget _header() {
     return Container(
       height: _headerH,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       color: KeliTheme.surface2,
       child: Row(
         children: [
           Icon(widget.icon, size: 15, color: KeliTheme.accent),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           Text(widget.title,
-              style: const TextStyle(color: KeliTheme.accentBright, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.5)),
-          const Spacer(),
+              style: TextStyle(color: KeliTheme.accentBright, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.5)),
+          Spacer(),
           GestureDetector(
             onTap: () => setState(() => _collapsed = !_collapsed),
             child: Icon(_collapsed ? Icons.open_in_full : Icons.close_fullscreen, size: 15, color: KeliTheme.accentDim),
@@ -151,7 +151,7 @@ class _RefreshingImageState extends State<RefreshingImage> {
       fit: widget.fit,
       gaplessPlayback: true,
       errorBuilder: (_, _, _) => Center(
-        child: Text(widget.offline, style: const TextStyle(color: KeliTheme.muted, fontSize: 12)),
+        child: Text(widget.offline, style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
       ),
     );
   }

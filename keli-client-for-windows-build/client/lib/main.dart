@@ -9,6 +9,7 @@ import 'services/keli_connection.dart';
 import 'services/keli_settings.dart';
 import 'services/maradel_session.dart';
 import 'services/mic_streamer.dart';
+import 'services/persona.dart';
 import 'services/unity_bridge.dart';
 import 'services/voice_player.dart';
 import 'theme.dart';
@@ -42,6 +43,14 @@ class KeliApp extends StatelessWidget {
         // Flutter↔Unity bridge (skin list + set_skin + avatar index). init() restores the persisted
         // avatar and asks Unity for the skin list at startup.
         ChangeNotifierProvider(create: (_) => UnityBridge()..init()),
+        // Persona sync: recolors KeliTheme + sets the avatar to Maradel's ACTIVE persona (boot +
+        // persona:changed on :9100), and binds a user-picked skin back to the persona. lazy:false so
+        // it connects/recolors at startup without waiting for a widget to read it.
+        ChangeNotifierProxyProvider<UnityBridge, Persona>(
+          lazy: false,
+          create: (_) => Persona(),
+          update: (_, bridge, p) => (p ?? Persona())..attach(bridge),
+        ),
         // Read-only mirror of the live Maradel session (floating chat window). Binds to the SAME
         // backend socket as KeliConnection and pulls GET /session for the initial load.
         ChangeNotifierProxyProvider<KeliConnection, MaradelSession>(
@@ -62,11 +71,17 @@ class KeliApp extends StatelessWidget {
           update: (_, voice, mic) => (mic ?? MicStreamer())..setSpeaking(voice.busy),
         ),
       ],
-      child: MaterialApp(
-        title: 'Keli',
-        debugShowCheckedModeBanner: false,
-        theme: KeliTheme.dark(),
-        home: const HomeScreen(),
+      // Repaint the whole app when the live palette changes (persona recolor). HomeScreen is
+      // intentionally non-const here so its subtree rebuilds and re-reads KeliTheme.* on recolor;
+      // the embedded Unity view stays warm (it's held by a GlobalKey inside HomeScreen).
+      child: ValueListenableBuilder<int>(
+        valueListenable: KeliTheme.revision,
+        builder: (context, _, _) => MaterialApp(
+          title: 'Keli',
+          debugShowCheckedModeBanner: false,
+          theme: KeliTheme.dark(),
+          home: HomeScreen(),
+        ),
       ),
     );
   }

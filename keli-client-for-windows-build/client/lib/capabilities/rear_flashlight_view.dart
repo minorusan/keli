@@ -44,7 +44,7 @@ class _RearFlashlightViewState extends State<RearFlashlightView> {
       setState(() => _on = true);
       final ms = (widget.command.data['timeoutMs'] as num?)?.toInt() ?? 30000;
       _remaining = (ms / 1000).ceil();
-      _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+      _ticker = Timer.periodic(Duration(seconds: 1), (_) {
         if (!mounted) return;
         setState(() => _remaining--);
         if (_remaining <= 0) _finish('timeout');
@@ -80,7 +80,7 @@ class _RearFlashlightViewState extends State<RearFlashlightView> {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24),
         child: CommandCard(
           title: 'Rear flashlight',
           icon: Icons.flashlight_on,
@@ -89,16 +89,16 @@ class _RearFlashlightViewState extends State<RearFlashlightView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (_error != null)
-                Text(_error!, style: const TextStyle(color: KeliTheme.danger, fontSize: 13))
+                Text(_error!, style: TextStyle(color: KeliTheme.danger, fontSize: 13))
               else
                 Row(children: [
                   Icon(_on ? Icons.lightbulb : Icons.lightbulb_outline, color: _on ? KeliTheme.accent : KeliTheme.muted),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   Text(_on ? 'Torch ON · ${_remaining}s' : 'starting…',
-                      style: const TextStyle(color: KeliTheme.text, fontSize: 14)),
+                      style: TextStyle(color: KeliTheme.text, fontSize: 14)),
                 ]),
-              const SizedBox(height: 6),
-              const Text('tap ✕ to turn off', style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
+              SizedBox(height: 6),
+              Text('tap ✕ to turn off', style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
             ],
           ),
         ),

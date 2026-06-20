@@ -8,7 +8,7 @@ import '../theme.dart';
 /// real name), and on pick sends `set_skin <real>` to Unity and closes.
 Future<void> showSkinPicker(BuildContext context) {
   context.read<UnityBridge>().requestSkins();
-  return showDialog<void>(context: context, builder: (_) => const _SkinPicker());
+  return showDialog<void>(context: context, builder: (_) => _SkinPicker());
 }
 
 class _SkinPicker extends StatefulWidget {
@@ -39,26 +39,26 @@ class _SkinPickerState extends State<_SkinPicker> {
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 520, maxHeight: h * 0.8),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 12),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text('Select a skin', style: TextStyle(color: KeliTheme.accent, fontWeight: FontWeight.w700, fontSize: 16)),
                   ),
-                  Text('${shown.length}', style: const TextStyle(color: KeliTheme.muted, fontSize: 12)),
-                  IconButton(icon: const Icon(Icons.close, color: KeliTheme.muted), onPressed: () => Navigator.of(context).pop()),
+                  Text('${shown.length}', style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
+                  IconButton(icon: Icon(Icons.close, color: KeliTheme.muted), onPressed: () => Navigator.of(context).pop()),
                 ],
               ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               TextField(
                 autofocus: true,
-                style: const TextStyle(color: KeliTheme.text),
+                style: TextStyle(color: KeliTheme.text),
                 onChanged: (v) => setState(() => _q = v),
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   isDense: true,
                   prefixIcon: Icon(Icons.search, color: KeliTheme.muted),
                   hintText: 'search by name…',
@@ -67,10 +67,10 @@ class _SkinPickerState extends State<_SkinPicker> {
                   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: KeliTheme.accent)),
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8),
               Flexible(
                 child: (all.isEmpty && bridge.awaiting)
-                    ? const Padding(
+                    ? Padding(
                         padding: EdgeInsets.all(28),
                         child: Center(
                           child: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -81,7 +81,7 @@ class _SkinPickerState extends State<_SkinPicker> {
                         ),
                       )
                     : all.isEmpty
-                        ? const Padding(
+                        ? Padding(
                             padding: EdgeInsets.all(28),
                             child: Text('No skins reported by Unity. Is the face running?',
                                 style: TextStyle(color: KeliTheme.muted, fontSize: 12), textAlign: TextAlign.center),
@@ -93,9 +93,9 @@ class _SkinPickerState extends State<_SkinPicker> {
                               final s = shown[i];
                               return ListTile(
                                 dense: true,
-                                title: Text(s.display, style: const TextStyle(color: KeliTheme.text, fontWeight: FontWeight.w600)),
-                                subtitle: Text('${s.category} · ${s.real}', style: const TextStyle(color: KeliTheme.muted, fontSize: 11)),
-                                trailing: const Icon(Icons.chevron_right, color: KeliTheme.muted, size: 18),
+                                title: Text(s.display, style: TextStyle(color: KeliTheme.text, fontWeight: FontWeight.w600)),
+                                subtitle: Text('${s.category} · ${s.real}', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+                                trailing: Icon(Icons.chevron_right, color: KeliTheme.muted, size: 18),
                                 onTap: () {
                                   context.read<UnityBridge>().setSkin(s.real); // real name → Unity
                                   Navigator.of(context).pop();

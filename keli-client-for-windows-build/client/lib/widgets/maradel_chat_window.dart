@@ -14,7 +14,7 @@ class MaradelChatWindow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const DraggableWindow(
+    return DraggableWindow(
       title: 'MARADEL',
       icon: Icons.chat_bubble_outline,
       corner: WindowCorner.topRight,
@@ -53,7 +53,7 @@ class _ChatBodyState extends State<_ChatBody> {
     return Consumer<MaradelSession>(
       builder: (_, s, _) {
         if (s.isEmpty) {
-          return const Center(
+          return Center(
             child: Padding(
               padding: EdgeInsets.all(16),
               child: Text(
@@ -69,12 +69,12 @@ class _ChatBodyState extends State<_ChatBody> {
         final pending = s.pendingTools;
         return ListView(
           controller: _scroll,
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           children: [
             for (final m in msgs) _MessageBlock(message: m),
             // In-progress assistant turn: tools that arrived before the reply text.
             if (pending.isNotEmpty) ...[
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 4, top: 2, bottom: 2),
                 child: Text('Maradel is working…',
                     style: TextStyle(color: KeliTheme.muted, fontSize: 10, fontStyle: FontStyle.italic)),
@@ -103,23 +103,23 @@ class _MessageBlock extends StatelessWidget {
           Align(
             alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
             child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 3),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-              constraints: const BoxConstraints(maxWidth: 230),
+              margin: EdgeInsets.symmetric(vertical: 3),
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+              constraints: BoxConstraints(maxWidth: 230),
               decoration: BoxDecoration(
                 color: isUser ? KeliTheme.surface2 : KeliTheme.surface,
                 borderRadius: BorderRadius.circular(12),
                 border: isUser ? null : Border.all(color: KeliTheme.accent.withValues(alpha: 0.25)),
               ),
               child: isUser
-                  ? Text(message.content, style: const TextStyle(color: KeliTheme.text, fontSize: 12))
+                  ? Text(message.content, style: TextStyle(color: KeliTheme.text, fontSize: 12))
                   : MarkdownBody(
                       data: message.content,
                       styleSheet: MarkdownStyleSheet(
-                        p: const TextStyle(color: KeliTheme.text, fontSize: 12),
-                        code: const TextStyle(color: KeliTheme.accentBright, fontSize: 11, backgroundColor: KeliTheme.surface2),
-                        listBullet: const TextStyle(color: KeliTheme.text, fontSize: 12),
-                        a: const TextStyle(color: KeliTheme.accent),
+                        p: TextStyle(color: KeliTheme.text, fontSize: 12),
+                        code: TextStyle(color: KeliTheme.accentBright, fontSize: 11, backgroundColor: KeliTheme.surface2),
+                        listBullet: TextStyle(color: KeliTheme.text, fontSize: 12),
+                        a: TextStyle(color: KeliTheme.accent),
                       ),
                     ),
             ),
@@ -151,9 +151,9 @@ class _ToolCardState extends State<_ToolCard> {
       _ => (KeliTheme.muted, 'running…'),
     };
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 3),
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-      constraints: const BoxConstraints(maxWidth: 250),
+      margin: EdgeInsets.symmetric(vertical: 3),
+      padding: EdgeInsets.symmetric(horizontal: 9, vertical: 6),
+      constraints: BoxConstraints(maxWidth: 250),
       decoration: BoxDecoration(
         color: KeliTheme.surface2,
         borderRadius: BorderRadius.circular(10),
@@ -165,16 +165,16 @@ class _ToolCardState extends State<_ToolCard> {
         children: [
           Row(
             children: [
-              const Icon(Icons.build_circle_outlined, size: 13, color: KeliTheme.accent),
-              const SizedBox(width: 5),
+              Icon(Icons.build_circle_outlined, size: 13, color: KeliTheme.accent),
+              SizedBox(width: 5),
               Flexible(
                 child: Text(t.name,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: KeliTheme.text, fontSize: 11, fontWeight: FontWeight.w700)),
+                    style: TextStyle(color: KeliTheme.text, fontSize: 11, fontWeight: FontWeight.w700)),
               ),
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                padding: EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                 decoration: BoxDecoration(
                   color: chipColor.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(6),
@@ -185,36 +185,36 @@ class _ToolCardState extends State<_ToolCard> {
           ),
           if (t.input.trim().isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(top: 3),
+              padding: EdgeInsets.only(top: 3),
               child: Text(t.input,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: KeliTheme.muted, fontSize: 10, fontStyle: FontStyle.italic)),
+                  style: TextStyle(color: KeliTheme.muted, fontSize: 10, fontStyle: FontStyle.italic)),
             ),
           if (t.notes.trim().isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(top: 3),
-              child: Text(t.notes, style: const TextStyle(color: KeliTheme.muted, fontSize: 10)),
+              padding: EdgeInsets.only(top: 3),
+              child: Text(t.notes, style: TextStyle(color: KeliTheme.muted, fontSize: 10)),
             ),
           if (t.output.trim().isNotEmpty) ...[
-            const SizedBox(height: 3),
+            SizedBox(height: 3),
             GestureDetector(
               onTap: () => setState(() => _open = !_open),
               child: Row(
                 children: [
                   Icon(_open ? Icons.expand_less : Icons.expand_more, size: 14, color: KeliTheme.accentDim),
                   Text(_open ? 'hide output' : 'show output',
-                      style: const TextStyle(color: KeliTheme.accentDim, fontSize: 10)),
+                      style: TextStyle(color: KeliTheme.accentDim, fontSize: 10)),
                 ],
               ),
             ),
             if (_open)
               Container(
                 width: double.infinity,
-                margin: const EdgeInsets.only(top: 3),
-                padding: const EdgeInsets.all(6),
+                margin: EdgeInsets.only(top: 3),
+                padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(color: KeliTheme.bg, borderRadius: BorderRadius.circular(6)),
-                child: Text(t.output, style: const TextStyle(color: KeliTheme.text, fontSize: 10)),
+                child: Text(t.output, style: TextStyle(color: KeliTheme.text, fontSize: 10)),
               ),
           ],
         ],

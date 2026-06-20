@@ -40,6 +40,10 @@ class UnityBridge extends ChangeNotifier {
   /// The avatar currently shown (the skin at [index]) — drives the ◀/▶ name + category label.
   SkinItem? get currentSkin => (_idx >= 0 && _idx < _skins.length) ? _skins[_idx] : null;
 
+  /// Fired when the USER picks a skin on the tablet (picker / ◀▶) — NOT on persona-driven changes.
+  /// `Persona` uses this to bind the chosen avatar to the active persona (POST /persona/skin).
+  void Function(String real)? onUserPickedSkin;
+
   /// Load the persisted selection and ask Unity for the skin list. Call once at startup.
   Future<void> init() async {
     try {
@@ -161,8 +165,17 @@ class UnityBridge extends ChangeNotifier {
     } catch (_) {/* best-effort */}
   }
 
-  /// Apply a skin by its real name (from the picker or ◀/▶), sync [index], and persist it.
+  /// Apply a skin by its real name from a USER action (picker or ◀/▶): syncs [index], persists it,
+  /// and notifies [onUserPickedSkin] so it gets bound to the active persona.
   void setSkin(String real) {
+    _applySkin(real);
+    onUserPickedSkin?.call(real);
+  }
+
+  /// Apply a skin chosen by the active PERSONA (no `onUserPickedSkin` → no bind-back POST loop).
+  void applySkinExternally(String real) => _applySkin(real);
+
+  void _applySkin(String real) {
     _send(real);
     final i = _skins.indexWhere((s) => s.real == real);
     if (i >= 0) _idx = i;

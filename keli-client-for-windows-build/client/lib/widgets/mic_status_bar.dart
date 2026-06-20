@@ -58,22 +58,22 @@ class _MicStatusBarState extends State<MicStatusBar> {
         onTap: () => setState(() => _expanded = !_expanded),
         child: Container(
           height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: const BoxDecoration(border: Border(top: BorderSide(color: KeliTheme.surface2))),
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(border: Border(top: BorderSide(color: KeliTheme.surface2))),
           child: Row(
             children: [
               Icon(on ? Icons.mic : Icons.mic_off, size: 18, color: stateColor),
-              const SizedBox(width: 8),
+              SizedBox(width: 8),
               _VuMeter(level: mic.levelVN, active: on),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Container(width: 8, height: 8, decoration: BoxDecoration(color: stateColor, shape: BoxShape.circle)),
-              const SizedBox(width: 6),
+              SizedBox(width: 6),
               Text(stateText, style: TextStyle(color: stateColor, fontSize: 12, fontWeight: FontWeight.w600)),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               if (on) _ChunkCounter(chunks: mic.chunksVN),
-              const SizedBox(width: 10),
-              const _VoiceLevelReadout(),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
+              _VoiceLevelReadout(),
+              SizedBox(width: 10),
               Expanded(
                 child: ValueListenableBuilder<int>(
                   valueListenable: AppLog.revision,
@@ -82,12 +82,12 @@ class _MicStatusBarState extends State<MicStatusBar> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.right,
-                    style: const TextStyle(color: KeliTheme.muted, fontSize: 11, fontFamily: 'monospace'),
+                    style: TextStyle(color: KeliTheme.muted, fontSize: 11, fontFamily: 'monospace'),
                   ),
                 ),
               ),
               Icon(_expanded ? Icons.expand_more : Icons.expand_less, size: 20, color: KeliTheme.muted),
-              const SizedBox(width: 76), // keep clear of the FAB
+              SizedBox(width: 76), // keep clear of the FAB
             ],
           ),
         ),
@@ -125,7 +125,7 @@ class _VuMeter extends StatelessWidget {
             return Container(
               width: 4,
               height: 6.0 + i * 1.1,
-              margin: const EdgeInsets.symmetric(horizontal: 1),
+              margin: EdgeInsets.symmetric(horizontal: 1),
               decoration: BoxDecoration(
                 color: isLit ? c : KeliTheme.surface2,
                 borderRadius: BorderRadius.circular(1),
@@ -155,9 +155,9 @@ class _VoiceLevelReadout extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(icon, size: 15, color: KeliTheme.muted),
-        const SizedBox(width: 3),
+        SizedBox(width: 3),
         Text('$pct%',
-            style: const TextStyle(
+            style: TextStyle(
                 color: KeliTheme.text, fontSize: 12, fontFeatures: [FontFeature.tabularFigures()])),
       ],
     );
@@ -175,9 +175,9 @@ class _ChunkCounter extends StatelessWidget {
       builder: (_, n, _) => Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.north_rounded, size: 13, color: KeliTheme.accent),
-          const SizedBox(width: 2),
-          Text('$n', style: const TextStyle(color: KeliTheme.text, fontSize: 12, fontFeatures: [FontFeature.tabularFigures()])),
+          Icon(Icons.north_rounded, size: 13, color: KeliTheme.accent),
+          SizedBox(width: 2),
+          Text('$n', style: TextStyle(color: KeliTheme.text, fontSize: 12, fontFeatures: [FontFeature.tabularFigures()])),
         ],
       ),
     );
@@ -197,8 +197,8 @@ class _ConsolePanel extends StatelessWidget {
       color: KeliTheme.bg,
       child: Column(
         children: [
-          const _MicTestBar(),
-          const Divider(height: 1, color: KeliTheme.surface2),
+          _MicTestBar(),
+          Divider(height: 1, color: KeliTheme.surface2),
           Expanded(
             child: ValueListenableBuilder<int>(
               valueListenable: AppLog.revision,
@@ -206,7 +206,7 @@ class _ConsolePanel extends StatelessWidget {
                 final lines = AppLog.tail(400);
                 return ListView.builder(
                   reverse: true,
-                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                  padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
                   itemCount: lines.length,
                   itemBuilder: (_, i) {
                     final line = lines[lines.length - 1 - i];
@@ -215,7 +215,7 @@ class _ConsolePanel extends StatelessWidget {
                         line.contains('denied') ||
                         line.contains('NO audio');
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 1),
+                      padding: EdgeInsets.symmetric(vertical: 1),
                       child: Text(
                         line,
                         style: TextStyle(
@@ -289,11 +289,11 @@ class _MicTestBarState extends State<_MicTestBar> {
         _pausedEars = mic;
         AppLog.log('mictest', 'pausing Ears stream to free the mic for the test');
         await mic.setEnabled(false);
-        await Future.delayed(const Duration(milliseconds: 300)); // let AudioRecord fully release
+        await Future.delayed(Duration(milliseconds: 300)); // let AudioRecord fully release
       }
       final path = await _path();
       await _rec.start(
-        const RecordConfig(
+        RecordConfig(
           encoder: AudioEncoder.wav,
           sampleRate: 16000,
           numChannels: 1,
@@ -352,8 +352,8 @@ class _MicTestBarState extends State<_MicTestBar> {
     try {
       final bytes = await File(p).readAsBytes();
       final res = await http
-          .put(Uri.parse('$kShareBaseUrl/$name'), headers: const {'content-type': 'audio/wav'}, body: bytes)
-          .timeout(const Duration(seconds: 30));
+          .put(Uri.parse('$kShareBaseUrl/$name'), headers: {'content-type': 'audio/wav'}, body: bytes)
+          .timeout(Duration(seconds: 30));
       final ok = res.statusCode >= 200 && res.statusCode < 300;
       AppLog.log('mictest', ok ? 'uploaded clip → share/$name' : 'upload failed: HTTP ${res.statusCode}');
       _toast(ok ? 'Sent to share: $name' : 'Upload failed (${res.statusCode})');
@@ -374,8 +374,8 @@ class _MicTestBarState extends State<_MicTestBar> {
     final name = 'keli-log-${DateTime.now().millisecondsSinceEpoch}.log';
     try {
       final res = await http
-          .put(Uri.parse('$kShareBaseUrl/$name'), headers: const {'content-type': 'text/plain; charset=utf-8'}, body: AppLog.text())
-          .timeout(const Duration(seconds: 30));
+          .put(Uri.parse('$kShareBaseUrl/$name'), headers: {'content-type': 'text/plain; charset=utf-8'}, body: AppLog.text())
+          .timeout(Duration(seconds: 30));
       final ok = res.statusCode >= 200 && res.statusCode < 300;
       AppLog.log('logs', ok ? 'shared logs → share/$name' : 'share failed: HTTP ${res.statusCode}');
       _toast(ok ? 'Logs shared: $name' : 'Share failed (${res.statusCode})');
@@ -393,7 +393,7 @@ class _MicTestBarState extends State<_MicTestBar> {
   Widget build(BuildContext context) {
     final hasClip = _clipPath != null && _clipBytes > 0;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       color: KeliTheme.surface,
       child: Row(
         children: [
@@ -405,7 +405,7 @@ class _MicTestBarState extends State<_MicTestBar> {
             onPointerUp: (_) => _stopHold(),
             onPointerCancel: (_) => _stopHold(),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               decoration: BoxDecoration(
                 color: _recording ? KeliTheme.danger : KeliTheme.surface2,
                 borderRadius: BorderRadius.circular(8),
@@ -415,24 +415,24 @@ class _MicTestBarState extends State<_MicTestBar> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(_recording ? Icons.fiber_manual_record : Icons.mic, size: 16, color: _recording ? Colors.white : KeliTheme.accent),
-                  const SizedBox(width: 6),
+                  SizedBox(width: 6),
                   Text(_recording ? 'REC — release to stop' : 'Hold to record',
                       style: TextStyle(color: _recording ? Colors.white : KeliTheme.text, fontSize: 12, fontWeight: FontWeight.w700)),
                 ],
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           _miniBtn(Icons.play_arrow, 'Play', hasClip ? _play : null),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           _miniBtn(Icons.send, 'Send', hasClip ? _send : null),
           if (hasClip) ...[
-            const SizedBox(width: 8),
-            Text('$_clipBytes B', style: const TextStyle(color: KeliTheme.muted, fontSize: 11)),
+            SizedBox(width: 8),
+            Text('$_clipBytes B', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
           ],
-          const Spacer(),
+          Spacer(),
           _miniBtn(Icons.copy, 'Copy logs', _copyLogs),
-          const SizedBox(width: 6),
+          SizedBox(width: 6),
           _miniBtn(Icons.ios_share, 'Share logs', _shareLogs),
         ],
       ),
@@ -446,7 +446,7 @@ class _MicTestBarState extends State<_MicTestBar> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: color.withValues(alpha: 0.4)),
@@ -455,7 +455,7 @@ class _MicTestBarState extends State<_MicTestBar> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 15, color: color),
-            const SizedBox(width: 4),
+            SizedBox(width: 4),
             Text(label, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600)),
           ],
         ),

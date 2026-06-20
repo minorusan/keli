@@ -22,12 +22,12 @@ class CommandCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: EdgeInsets.only(bottom: 12),
       color: KeliTheme.surface,
       elevation: 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: const BorderSide(color: KeliTheme.surface2),
+        side: BorderSide(color: KeliTheme.surface2),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -36,28 +36,28 @@ class CommandCard extends StatelessWidget {
         children: [
           Container(
             color: KeliTheme.surface2,
-            padding: const EdgeInsets.fromLTRB(14, 8, 6, 8),
+            padding: EdgeInsets.fromLTRB(14, 8, 6, 8),
             child: Row(
               children: [
                 Icon(icon, color: KeliTheme.accent, size: 18),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(color: KeliTheme.text, fontSize: 14, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: KeliTheme.text, fontSize: 14, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 IconButton(
                   tooltip: 'Close',
-                  icon: const Icon(Icons.close, color: KeliTheme.muted, size: 20),
+                  icon: Icon(Icons.close, color: KeliTheme.muted, size: 20),
                   onPressed: onClose,
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 10, 14, 14),
+            padding: EdgeInsets.fromLTRB(14, 10, 14, 14),
             child: child,
           ),
         ],

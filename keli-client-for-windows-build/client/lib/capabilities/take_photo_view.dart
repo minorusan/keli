@@ -59,7 +59,7 @@ class _TakePhotoViewState extends State<TakePhotoView> {
       });
       final ms = (widget.command.data['timeoutMs'] as num?)?.toInt() ?? 5000;
       _remaining = (ms / 1000).ceil();
-      _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+      _ticker = Timer.periodic(Duration(seconds: 1), (_) {
         if (!mounted) return;
         setState(() => _remaining--);
         if (_remaining <= 0) _capture();
@@ -99,14 +99,14 @@ class _TakePhotoViewState extends State<TakePhotoView> {
   @override
   Widget build(BuildContext context) {
     if (_error != null) {
-      return Center(child: Text(_error!, style: const TextStyle(color: KeliTheme.danger)));
+      return Center(child: Text(_error!, style: TextStyle(color: KeliTheme.danger)));
     }
     if (!_ready || _controller == null) {
-      return const Center(child: CircularProgressIndicator(color: KeliTheme.accent));
+      return Center(child: CircularProgressIndicator(color: KeliTheme.accent));
     }
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -114,23 +114,23 @@ class _TakePhotoViewState extends State<TakePhotoView> {
               borderRadius: BorderRadius.circular(12),
               child: AspectRatio(aspectRatio: 3 / 4, child: CameraPreview(_controller!)),
             ),
-            const SizedBox(height: 14),
+            SizedBox(height: 14),
             Text('$_which camera · auto in ${_remaining}s',
-                style: const TextStyle(color: KeliTheme.muted, fontSize: 12)),
-            const SizedBox(height: 10),
+                style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
                   onPressed: () => _finish(ok: false, reason: 'cancelled'),
-                  child: const Text('Cancel', style: TextStyle(color: KeliTheme.muted)),
+                  child: Text('Cancel', style: TextStyle(color: KeliTheme.muted)),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: 16),
                 FilledButton.icon(
                   style: FilledButton.styleFrom(backgroundColor: KeliTheme.accent, foregroundColor: KeliTheme.bg),
                   onPressed: _capture,
-                  icon: const Icon(Icons.camera_alt),
-                  label: const Text('Take'),
+                  icon: Icon(Icons.camera_alt),
+                  label: Text('Take'),
                 ),
               ],
             ),

@@ -24,6 +24,21 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 57,
+    version: '1.0.57',
+    date: '2026-06-21',
+    title: 'The tablet follows the active persona — colors + avatar',
+    body: '''
+- Keli now **dresses for whoever Maradel currently is**. Switch the active persona (in the admin) and
+  the tablet **recolors its whole UI** to that persona's palette and **swaps to its avatar** — live, no
+  restart. On cold start it loads the active persona's colors + avatar too.
+- Picking an avatar with the ◀/▶ buttons or the picker now **sticks it to the current persona**, so it
+  comes back the same way next time.
+- Under the hood the theme is now a live palette (recolors on the fly) seeded from the usual fel-frost
+  look, so personas without a custom scheme look exactly as before.
+''',
+  ),
+  ChangelogEntry(
     build: 56,
     version: '1.0.56',
     date: '2026-06-20',
@@ -678,21 +693,21 @@ Future<void> showChangelogDialog(BuildContext context, ChangelogEntry e, {bool i
       backgroundColor: KeliTheme.surface,
       title: Text(
         isNew ? "What's new · v${e.version}" : '${e.title} · v${e.version}',
-        style: const TextStyle(color: KeliTheme.accent, fontWeight: FontWeight.w700, fontSize: 16),
+        style: TextStyle(color: KeliTheme.accent, fontWeight: FontWeight.w700, fontSize: 16),
       ),
       content: SingleChildScrollView(
         child: MarkdownBody(
           data: '### ${e.title}\n\n${e.body}',
           styleSheet: MarkdownStyleSheet(
-            p: const TextStyle(color: KeliTheme.text, fontSize: 14, height: 1.5),
-            h3: const TextStyle(color: KeliTheme.text, fontSize: 15, fontWeight: FontWeight.w700),
+            p: TextStyle(color: KeliTheme.text, fontSize: 14, height: 1.5),
+            h3: TextStyle(color: KeliTheme.text, fontSize: 15, fontWeight: FontWeight.w700),
           ),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx),
-          child: const Text('Got it', style: TextStyle(color: KeliTheme.accent)),
+          child: Text('Got it', style: TextStyle(color: KeliTheme.accent)),
         ),
       ],
     ),

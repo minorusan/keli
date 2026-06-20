@@ -25,13 +25,13 @@ class ShowTextView extends StatelessWidget {
         data: command.str('text'),
         selectable: true,
         styleSheet: MarkdownStyleSheet(
-          p: const TextStyle(color: KeliTheme.text, fontSize: 14, height: 1.5),
-          h1: const TextStyle(color: KeliTheme.text, fontSize: 20, fontWeight: FontWeight.bold),
-          h2: const TextStyle(color: KeliTheme.text, fontSize: 17, fontWeight: FontWeight.bold),
-          code: const TextStyle(color: KeliTheme.accent, backgroundColor: KeliTheme.bg, fontFamily: 'monospace'),
+          p: TextStyle(color: KeliTheme.text, fontSize: 14, height: 1.5),
+          h1: TextStyle(color: KeliTheme.text, fontSize: 20, fontWeight: FontWeight.bold),
+          h2: TextStyle(color: KeliTheme.text, fontSize: 17, fontWeight: FontWeight.bold),
+          code: TextStyle(color: KeliTheme.accent, backgroundColor: KeliTheme.bg, fontFamily: 'monospace'),
           codeblockDecoration: BoxDecoration(color: KeliTheme.bg, borderRadius: BorderRadius.circular(8)),
-          blockquoteDecoration: const BoxDecoration(border: Border(left: BorderSide(color: KeliTheme.accentDim, width: 3))),
-          a: const TextStyle(color: KeliTheme.accent, decoration: TextDecoration.underline),
+          blockquoteDecoration: BoxDecoration(border: Border(left: BorderSide(color: KeliTheme.accentDim, width: 3))),
+          a: TextStyle(color: KeliTheme.accent, decoration: TextDecoration.underline),
         ),
         onTapLink: (text, href, title) {
           if (href != null) launchUrl(Uri.parse(href), mode: LaunchMode.externalApplication);

@@ -35,7 +35,7 @@ class _FaceScreenState extends State<FaceScreen> {
       backgroundColor: KeliTheme.bg,
       appBar: AppBar(
         backgroundColor: KeliTheme.surface,
-        title: const Text('Face', style: TextStyle(letterSpacing: 1.5, fontWeight: FontWeight.w700)),
+        title: Text('Face', style: TextStyle(letterSpacing: 1.5, fontWeight: FontWeight.w700)),
       ),
       body: Stack(
         children: [
@@ -63,15 +63,15 @@ class _Placeholder extends StatelessWidget {
         children: [
           // Stand-in for the Unity face: the sigil, glowing brighter while speech is flowing.
           AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            padding: const EdgeInsets.all(10),
+            duration: Duration(milliseconds: 200),
+            padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               boxShadow: KeliTheme.glow(blur: speaking ? 60 : 30, alpha: speaking ? 0.6 : 0.3),
             ),
             child: Image.asset('assets/icon/maradel_icon.png', width: 150, height: 150),
           ),
-          const SizedBox(height: 28),
+          SizedBox(height: 28),
           Text(
             speaking ? 'speaking…' : 'idle',
             style: TextStyle(
@@ -81,13 +81,13 @@ class _Placeholder extends StatelessWidget {
               letterSpacing: 1,
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: 24),
           _row('Maradel voice link', bridge.voiceConnected ? 'connected' : 'connecting…', bridge.voiceConnected),
           _row('Unity face', bridge.faceReady ? 'ready' : 'awaiting Unity project', bridge.faceReady),
           _row('chunks forwarded', '${bridge.chunksSent}', bridge.chunksSent > 0),
           if (bridge.lastError != null) _row('last error', bridge.lastError!, false),
-          const SizedBox(height: 28),
-          const Padding(
+          SizedBox(height: 28),
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 36),
             child: Text(
               'The 3D Unity face mounts here. The bridge is already live — it forwards Maradel\'s '
@@ -102,15 +102,15 @@ class _Placeholder extends StatelessWidget {
   }
 
   Widget _row(String label, String value, bool ok) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(ok ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded,
                 size: 15, color: ok ? KeliTheme.accent : KeliTheme.muted),
-            const SizedBox(width: 8),
-            Text('$label: ', style: const TextStyle(color: KeliTheme.muted, fontSize: 13)),
-            Text(value, style: const TextStyle(color: KeliTheme.text, fontSize: 13, fontWeight: FontWeight.w600)),
+            SizedBox(width: 8),
+            Text('$label: ', style: TextStyle(color: KeliTheme.muted, fontSize: 13)),
+            Text(value, style: TextStyle(color: KeliTheme.text, fontSize: 13, fontWeight: FontWeight.w600)),
           ],
         ),
       );

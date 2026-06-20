@@ -12,7 +12,7 @@ Future<void> showRegistrationDialog(BuildContext context, {bool dismissible = tr
   return showDialog<void>(
     context: context,
     barrierDismissible: dismissible,
-    builder: (_) => const _RegistrationDialog(),
+    builder: (_) => _RegistrationDialog(),
   );
 }
 
@@ -106,7 +106,7 @@ class _RegistrationDialogState extends State<_RegistrationDialog> {
     bool submit = false,
   }) =>
       Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: EdgeInsets.only(bottom: 10),
         child: TextField(
           controller: c,
           focusNode: fn,
@@ -121,13 +121,13 @@ class _RegistrationDialogState extends State<_RegistrationDialog> {
               FocusScope.of(context).requestFocus(next);
             }
           },
-          style: const TextStyle(color: KeliTheme.text),
+          style: TextStyle(color: KeliTheme.text),
           decoration: InputDecoration(
             labelText: label,
             isDense: true,
-            labelStyle: const TextStyle(color: KeliTheme.muted),
-            enabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: KeliTheme.surface2)),
-            focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: KeliTheme.accent)),
+            labelStyle: TextStyle(color: KeliTheme.muted),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: KeliTheme.surface2)),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: KeliTheme.accent)),
           ),
         ),
       );
@@ -139,48 +139,48 @@ class _RegistrationDialogState extends State<_RegistrationDialog> {
     final insets = MediaQuery.of(context).viewInsets.bottom;
     return Dialog(
       backgroundColor: KeliTheme.surface,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      insetPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 460),
+        constraints: BoxConstraints(maxWidth: 460),
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(20, 18, 20, 18 + insets),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('Register this Keli',
+              Text('Register this Keli',
                   style: TextStyle(color: KeliTheme.accent, fontWeight: FontWeight.w700, fontSize: 16)),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 'Name this device and set a login + password. Use the same login & password on another '
                 'tablet to move this instance to it.',
                 style: TextStyle(color: KeliTheme.muted, fontSize: 12),
               ),
-              const SizedBox(height: 14),
+              SizedBox(height: 14),
               _field(_name, _fnName, 'Name (e.g. Living room tablet)', next: _fnDesc),
               _field(_desc, _fnDesc, 'Description', next: _fnLogin),
               _field(_login, _fnLogin, 'Login', next: _fnPass),
               _field(_pass, _fnPass, 'Password', obscure: true, action: TextInputAction.done, submit: true),
               if (_error != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 2, bottom: 6),
-                  child: Text(_error!, style: const TextStyle(color: KeliTheme.danger, fontSize: 13, fontWeight: FontWeight.w600)),
+                  padding: EdgeInsets.only(top: 2, bottom: 6),
+                  child: Text(_error!, style: TextStyle(color: KeliTheme.danger, fontSize: 13, fontWeight: FontWeight.w600)),
                 ),
-              const SizedBox(height: 6),
+              SizedBox(height: 6),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
                     onPressed: _busy ? null : () => Navigator.of(context).pop(),
-                    child: const Text('Close', style: TextStyle(color: KeliTheme.muted)),
+                    child: Text('Close', style: TextStyle(color: KeliTheme.muted)),
                   ),
-                  const SizedBox(width: 8),
+                  SizedBox(width: 8),
                   FilledButton(
                     onPressed: _busy ? null : _submit,
                     style: FilledButton.styleFrom(backgroundColor: KeliTheme.accent, foregroundColor: KeliTheme.bg),
                     child: _busy
-                        ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                        : const Text('Register'),
+                        ? SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                        : Text('Register'),
                   ),
                 ],
               ),

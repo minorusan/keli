@@ -30,7 +30,7 @@ class _InputStringViewState extends State<InputStringView> {
     super.initState();
     final ms = (widget.command.data['timeoutMs'] as num?)?.toInt() ?? 30000;
     _remaining = (ms / 1000).ceil();
-    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+    _ticker = Timer.periodic(Duration(seconds: 1), (_) {
       if (!mounted) return;
       setState(() => _remaining--);
       if (_remaining <= 0) _finish(ok: false, reason: 'timeout');
@@ -56,32 +56,32 @@ class _InputStringViewState extends State<InputStringView> {
     final prompt = widget.command.str('prompt').trim();
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         child: Material(
           color: KeliTheme.surface,
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(18),
+            padding: EdgeInsets.all(18),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.keyboard_outlined, color: KeliTheme.accent, size: 20),
-                    const SizedBox(width: 8),
+                    Icon(Icons.keyboard_outlined, color: KeliTheme.accent, size: 20),
+                    SizedBox(width: 8),
                     Expanded(
                       child: Text(prompt.isNotEmpty ? prompt : 'Enter text',
-                          style: const TextStyle(color: KeliTheme.text, fontSize: 15, fontWeight: FontWeight.w700)),
+                          style: TextStyle(color: KeliTheme.text, fontSize: 15, fontWeight: FontWeight.w700)),
                     ),
-                    Text('${_remaining}s', style: const TextStyle(color: KeliTheme.muted, fontSize: 12)),
+                    Text('${_remaining}s', style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
                   ],
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
                 TextField(
                   controller: _controller,
                   autofocus: true,
-                  style: const TextStyle(color: KeliTheme.text),
+                  style: TextStyle(color: KeliTheme.text),
                   minLines: 1,
                   maxLines: 4,
                   onSubmitted: (_) => _send(),
@@ -89,23 +89,23 @@ class _InputStringViewState extends State<InputStringView> {
                     filled: true,
                     fillColor: KeliTheme.bg,
                     hintText: 'Type here…',
-                    hintStyle: const TextStyle(color: KeliTheme.muted),
+                    hintStyle: TextStyle(color: KeliTheme.muted),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
                   ),
                 ),
-                const SizedBox(height: 14),
+                SizedBox(height: 14),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
                       onPressed: () => _finish(ok: false, reason: 'cancelled'),
-                      child: const Text('Cancel', style: TextStyle(color: KeliTheme.muted)),
+                      child: Text('Cancel', style: TextStyle(color: KeliTheme.muted)),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: 8),
                     FilledButton(
                       style: FilledButton.styleFrom(backgroundColor: KeliTheme.accent, foregroundColor: KeliTheme.bg),
                       onPressed: _send,
-                      child: const Text('Send'),
+                      child: Text('Send'),
                     ),
                   ],
                 ),

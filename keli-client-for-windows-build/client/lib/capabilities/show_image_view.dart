@@ -52,11 +52,11 @@ class ShowImageView extends StatelessWidget {
               ),
             )
           else
-            const Text('invalid image data', style: TextStyle(color: KeliTheme.danger)),
+            Text('invalid image data', style: TextStyle(color: KeliTheme.danger)),
           if (caption.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(caption, style: const TextStyle(color: KeliTheme.muted, fontSize: 12.5)),
+              padding: EdgeInsets.only(top: 8),
+              child: Text(caption, style: TextStyle(color: KeliTheme.muted, fontSize: 12.5)),
             ),
         ],
       ),
@@ -96,7 +96,7 @@ class _FullscreenImage extends StatelessWidget {
             top: MediaQuery.of(context).padding.top + 4,
             right: 4,
             child: IconButton(
-              icon: const Icon(Icons.close, color: Colors.white, size: 28),
+              icon: Icon(Icons.close, color: Colors.white, size: 28),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),

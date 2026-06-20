@@ -21,7 +21,7 @@ class PerceptionWindow extends StatelessWidget {
       width: 300,
       height: 210,
       child: p == null
-          ? const Center(
+          ? Center(
               child: Text('waiting for perception…', style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
             )
           : _Body(p),
@@ -44,33 +44,33 @@ class _Body extends StatelessWidget {
     final loc = (p['location'] as String?) ?? 'unknown';
     final present = p['present'] == true;
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.place_outlined, size: 15, color: KeliTheme.accent),
-              const SizedBox(width: 4),
+              Icon(Icons.place_outlined, size: 15, color: KeliTheme.accent),
+              SizedBox(width: 4),
               Expanded(
                 child: Text(loc,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: KeliTheme.text, fontSize: 13, fontWeight: FontWeight.w700)),
+                    style: TextStyle(color: KeliTheme.text, fontSize: 13, fontWeight: FontWeight.w700)),
               ),
               Icon(present ? Icons.person : Icons.person_off, size: 15, color: present ? KeliTheme.accent : KeliTheme.muted),
-              const SizedBox(width: 3),
+              SizedBox(width: 3),
               Text(present ? 'person' : 'empty',
                   style: TextStyle(color: present ? KeliTheme.accent : KeliTheme.muted, fontSize: 11)),
             ],
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _line('TAPO', _text(p['tapo'])),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6),
                   _line('USB', _text(p['usb'])),
                 ],
               ),
@@ -85,8 +85,8 @@ class _Body extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
-              style: const TextStyle(color: KeliTheme.muted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
-          Text(text, style: const TextStyle(color: KeliTheme.text, fontSize: 12, height: 1.3)),
+              style: TextStyle(color: KeliTheme.muted, fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 1)),
+          Text(text, style: TextStyle(color: KeliTheme.text, fontSize: 12, height: 1.3)),
         ],
       );
 }

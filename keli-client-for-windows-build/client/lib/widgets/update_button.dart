@@ -47,39 +47,39 @@ class _UpdateButtonState extends State<UpdateButton> {
     if (info == null) return;
     final ok = await launchUrl(Uri.parse(info.apkUrl), mode: LaunchMode.externalApplication);
     if (!ok && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not open the download')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not open the download')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     if (_checking) {
-      return const ListTile(
+      return ListTile(
         leading: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: KeliTheme.accent)),
         title: Text('Checking for updates…', style: TextStyle(color: KeliTheme.muted, fontSize: 13)),
       );
     }
     if (_error != null) {
       return ListTile(
-        leading: const Icon(Icons.refresh, color: KeliTheme.muted),
-        title: const Text('Update check failed', style: TextStyle(color: KeliTheme.muted, fontSize: 13)),
-        subtitle: const Text('tap to retry', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+        leading: Icon(Icons.refresh, color: KeliTheme.muted),
+        title: Text('Update check failed', style: TextStyle(color: KeliTheme.muted, fontSize: 13)),
+        subtitle: Text('tap to retry', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
         onTap: _check,
       );
     }
     final info = _info!;
     if (info.available) {
       return ListTile(
-        leading: const Icon(Icons.system_update, color: KeliTheme.accent),
+        leading: Icon(Icons.system_update, color: KeliTheme.accent),
         title: Text('Download update · v${info.version} (build ${info.build})',
-            style: const TextStyle(color: KeliTheme.accent, fontSize: 13, fontWeight: FontWeight.w600)),
+            style: TextStyle(color: KeliTheme.accent, fontSize: 13, fontWeight: FontWeight.w600)),
         onTap: _download,
       );
     }
     return ListTile(
-      leading: const Icon(Icons.check_circle_outline, color: KeliTheme.accentDim),
+      leading: Icon(Icons.check_circle_outline, color: KeliTheme.accentDim),
       title: Text('Up to date · v$kAppVersion (build $kAppBuild)',
-          style: const TextStyle(color: KeliTheme.muted, fontSize: 13)),
+          style: TextStyle(color: KeliTheme.muted, fontSize: 13)),
       onTap: _check,
     );
   }
