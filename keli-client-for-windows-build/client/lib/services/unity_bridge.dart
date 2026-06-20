@@ -25,6 +25,19 @@ class UnityBridge extends ChangeNotifier {
 
   // ── inbound (Unity → Flutter) ──
   void onUnityMessage(String raw) {
+    // Pipe a forwarded Unity console line (Application.logMessageReceived → SendToFlutter "log")
+    // CLEANLY into the shared keli log; everything else is logged raw so nothing is ever lost.
+    try {
+      final env = jsonDecode(raw);
+      if (env is Map && env['type'] == 'log') {
+        final inner = env['json'];
+        final data = (inner is String && inner.isNotEmpty) ? jsonDecode(inner) : inner;
+        final msg = (data is Map ? (data['msg'] ?? data['message'] ?? '') : data ?? '').toString();
+        final lvl = (data is Map ? (data['level'] ?? data['type'] ?? '') : '').toString();
+        AppLog.log('unity', lvl.isEmpty ? msg : '$lvl: $msg');
+        return;
+      }
+    } catch (_) {/* not a JSON envelope — fall through to raw */}
     AppLog.log('unity', raw);
     try {
       final env = jsonDecode(raw);

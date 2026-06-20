@@ -24,6 +24,22 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 44,
+    version: '1.0.44',
+    date: '2026-06-20',
+    title: 'Unity logs in the shared log',
+    body: '''
+The bridge now pipes Unity's console into the app log, so a shared log contains
+**everything** — Flutter *and* Unity — for debugging the face/lipsync.
+
+- Inbound `log` messages from Unity → `[unity]` lines in the log (clean), plus a
+  catch-all so no Unity message is ever dropped.
+- (Unity side, for the dev: forward `Application.logMessageReceived` as
+  `SendToFlutter.Send(envelope("log", {msg, level}))` — then its console shows up
+  in every shared log.)
+''',
+  ),
+  ChangelogEntry(
     build: 42,
     version: '1.0.42',
     date: '2026-06-20',

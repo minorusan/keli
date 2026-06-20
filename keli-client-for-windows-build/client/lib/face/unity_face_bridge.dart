@@ -77,6 +77,7 @@ class UnityFaceBridge extends ChangeNotifier {
     switch (type) {
       case FaceProtocol.ready:
         _faceReady = true;
+        AppLog.log('unity', 'face ready');
         break;
       case FaceProtocol.speakingStarted:
         _speaking = true;
@@ -86,9 +87,15 @@ class UnityFaceBridge extends ChangeNotifier {
         break;
       case FaceProtocol.error:
         _lastError = '${payload['message'] ?? 'unknown'}';
-        AppLog.log('face', 'unity error: $_lastError');
+        AppLog.log('unity', 'error: $_lastError');
         break;
+      case FaceProtocol.log: // Unity console line forwarded over the bridge → shared keli log
+        AppLog.log('unity', '${payload['level'] ?? ''}${payload['level'] != null ? ': ' : ''}${payload['msg'] ?? payload['message'] ?? ''}');
+        return;
+      case FaceProtocol.visemeFrame: // lipsync output — per-frame, too noisy to log (would flood the log)
+        return;
       default:
+        AppLog.log('unity', 'msg: $raw'); // never drop an inbound Unity message
         return;
     }
     notifyListeners();

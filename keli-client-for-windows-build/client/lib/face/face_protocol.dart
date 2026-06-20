@@ -25,6 +25,9 @@ class FaceProtocol {
   static const String speakingStopped = 'speakingStopped';
   static const String visemeFrame = 'visemeFrame'; // {dominant, volume}
   static const String error = 'error'; // {message}
+  // Unity console → shared keli log. The Unity side forwards Application.logMessageReceived as
+  // SendToFlutter.Send(envelope("log", {msg, level})); Flutter pipes it into AppLog('unity').
+  static const String log = 'log'; // {msg, level}
 
   /// Build the `{type, json}` envelope string Unity's `FlutterFaceBridge.OnMessage` expects.
   static String encode(String type, [Map<String, dynamic> payload = const {}]) =>
