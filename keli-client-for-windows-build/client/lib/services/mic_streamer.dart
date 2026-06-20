@@ -42,6 +42,9 @@ class MicStreamer extends ChangeNotifier {
   bool _disposed = false;
   bool _gotAudio = false;
   Timer? _watchdog;
+  Timer? _stableTimer;
+  int _connectedAt = 0;
+  bool _reconnectScheduled = false;
   int _backoffMs = 1000;
   int _consecutiveFails = 0;
   double _level = 0;
@@ -169,6 +172,9 @@ class MicStreamer extends ChangeNotifier {
   Future<void> _stop() async {
     _detail = 'off';
     _watchdog?.cancel();
+    _stableTimer?.cancel();
+    _reconnectScheduled = false;
+    _backoffMs = 1000;
     _gotAudio = false;
     await _audioSub?.cancel();
     _audioSub = null;
@@ -225,13 +231,21 @@ class MicStreamer extends ChangeNotifier {
       _ws = ws;
       _connected = true;
       _connecting = false;
-      _backoffMs = 1000;
+      _connectedAt = DateTime.now().millisecondsSinceEpoch;
       if (_consecutiveFails > 0) AppLog.log('mic', 'reconnected');
-      _consecutiveFails = 0;
       _detail = 'streaming → $target';
       AppLog.log('mic', 'ws connected → $url');
       notifyListeners();
-      ws.listen((_) {}, onError: (_) => _dropSocket(), onDone: _dropSocket, cancelOnError: true);
+      // Reset the backoff only once the link has proven STABLE (≥8s). A connection that drops sooner is
+      // a flap — we keep backing off so we don't hammer reconnects every second (the bug we saw).
+      _stableTimer?.cancel();
+      _stableTimer = Timer(const Duration(seconds: 8), () {
+        if (_ws == ws && _connected) {
+          _backoffMs = 1000;
+          _consecutiveFails = 0;
+        }
+      });
+      ws.listen((_) {}, onError: (e) => _dropSocket('error: $e'), onDone: () => _dropSocket('server closed (code ${ws.closeCode})'), cancelOnError: true);
     } catch (e) {
       _connecting = false;
       _connected = false;
@@ -245,14 +259,17 @@ class MicStreamer extends ChangeNotifier {
     }
   }
 
-  void _dropSocket() {
+  void _dropSocket([String? why]) {
     final had = _ws != null;
+    _stableTimer?.cancel();
+    final lifetimeMs = _connectedAt > 0 ? DateTime.now().millisecondsSinceEpoch - _connectedAt : 0;
     try {
       _ws?.close();
     } catch (_) {}
     _ws = null;
     _connected = false;
     _connecting = false;
+    if (had) AppLog.log('mic', 'ws dropped after ${lifetimeMs}ms${why != null ? ' — $why' : ''}');
     if (had && _enabled && !_disposed) {
       _detail = 'reconnecting…';
       notifyListeners();
@@ -261,9 +278,12 @@ class MicStreamer extends ChangeNotifier {
   }
 
   void _scheduleReconnect() {
+    if (_reconnectScheduled || !_enabled || _disposed) return; // only ever ONE pending reconnect
+    _reconnectScheduled = true;
     final ms = _backoffMs;
-    _backoffMs = (_backoffMs * 2).clamp(1000, 5000);
+    _backoffMs = (_backoffMs * 2).clamp(1000, 10000); // grow on each flap; capped at 10s so we stop hammering
     Future.delayed(Duration(milliseconds: ms), () {
+      _reconnectScheduled = false;
       if (_enabled && !_disposed && _ws == null) unawaited(_ensureSocket());
     });
   }
@@ -293,6 +313,7 @@ class MicStreamer extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _watchdog?.cancel();
+    _stableTimer?.cancel();
     _audioSub?.cancel();
     try {
       _recorder.dispose();

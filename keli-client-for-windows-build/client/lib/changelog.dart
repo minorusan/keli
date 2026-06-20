@@ -24,6 +24,18 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 38,
+    version: '1.0.37',
+    date: '2026-06-20',
+    title: 'Steadier mic connection',
+    body: '''
+- Fixed the mic to Maradel **flapping** — it was reconnecting every 1–2 seconds, chopping the audio.
+- Now the reconnect **backs off** when a link is short-lived (only resetting after it's been stable ≥8s),
+  there's only ever **one** pending reconnect, and drops are **logged with why + how long it lasted** so we
+  can chase any remaining cause.
+''',
+  ),
+  ChangelogEntry(
     build: 37,
     version: '1.0.36',
     date: '2026-06-20',
