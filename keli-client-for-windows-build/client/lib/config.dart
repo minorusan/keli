@@ -51,5 +51,5 @@ const String kShareBaseUrl = String.fromEnvironment(
 /// `version: x.y.z+BUILD` before each release build — the backend reads the
 /// pubspec build number from `/version.json`, and the installed app compares it
 /// against [kAppBuild] to offer an update.
-const String kAppVersion = '1.0.50';
-const int kAppBuild = 50;
+const String kAppVersion = '1.0.51';
+const int kAppBuild = 51;

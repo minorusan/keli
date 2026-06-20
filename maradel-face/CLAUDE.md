@@ -59,6 +59,13 @@ shows status + scale controls. THIS IS THE KNOWN-GOOD STATE.
 
 ## Change log
 
+- **Emotion → facial expression (`setMood`).** Completed the chain: backend broadcasts `voice:emotion`
+  (`speech/index.ts`); the app's `VoicePlayer` forwards it to the live bridge as `{type:setMood, text:<mood>}`
+  (the main screen has no `UnityFaceBridge`, so it sends straight to `FlutterFace.OnMessage`);
+  `FlutterControlBridge` now has a `setMood` case → `RocketboxAutoRig.SetMood` → `ExpressionController.SetEmotion`.
+  Caveat: the LLM-free mic voice-loop doesn't emit `voice:emotion` yet (chat path does) — backend would
+  need to add it for spoken-reply mood.
+
 - **`set_volume` → master volume (Unity reads it).** Maradel emits a `set_volume` command (Keli `:9120`
   socket); the Flutter app (`KeliSettings.setVolume`) applies it to its own audio AND writes the master
   `volume` into `keli_config.json` in the app's external files dir. `Common/KeliConfigVolume.cs` already

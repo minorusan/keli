@@ -666,6 +666,16 @@ namespace Maradel.Speech
 #endif
         }
 
+        /// <summary>Set the face's mood/emotion (from the backend's voice:emotion, forwarded by the app
+        /// as setMood). Drives the facial ExpressionController; unknown ids fall back to neutral.</summary>
+        public void SetMood(string mood)
+        {
+            if (string.IsNullOrEmpty(mood)) return;
+            L($"setMood '{mood}'", this);
+            if (_expr != null) _expr.SetEmotion(mood);
+            else W("setMood: no ExpressionController yet (face not wired)", this);
+        }
+
 #if ADDRESSABLES
         System.Collections.IEnumerator LoadAvatarListThenFirst()
         {

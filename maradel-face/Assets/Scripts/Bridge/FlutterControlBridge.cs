@@ -78,6 +78,7 @@ namespace Maradel.Bridge
                 case "hide":  rig.SetVisible(false); break;
                 case "get_skins": rig.SendSkins(); break;            // Flutter asks → Unity replies with the skin list
                 case "set_skin":  rig.SetSkinByName(m.text); break;  // load the skin by its real name
+                case "setmood":   rig.SetMood(m.text); break;        // reply emotion → facial expression
                 default:      Debug.LogWarning($"[BRIDGE] unknown control type '{m.type}'"); break;
             }
         }

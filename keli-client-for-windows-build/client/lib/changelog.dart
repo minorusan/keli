@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 51,
+    version: '1.0.51',
+    date: '2026-06-20',
+    title: 'Emotions actually render on the face',
+    body: '''
+- The face now **reacts with Maradel's mood**. The whole chain is finally connected: backend
+  `voice:emotion` → the app forwards it to the embedded face as `setMood` (the main screen never did
+  this — it only happened on the unused preview screen) → Unity's bridge now **handles `setMood`** and
+  drives the facial expression. Logged as `→setMood <mood>` / `[EXPR]`.
+- Note: spoken (talk-to-robot) replies only carry a mood once the backend emits `voice:emotion` for the
+  mic loop; chat replies already do.
+''',
+  ),
+  ChangelogEntry(
     build: 50,
     version: '1.0.50',
     date: '2026-06-20',

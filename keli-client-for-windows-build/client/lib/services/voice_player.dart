@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_embed_unity/flutter_embed_unity.dart';
 
 import '../app_log.dart';
 import '../face/maradel_voice_client.dart';
@@ -62,6 +64,16 @@ class VoicePlayer extends ChangeNotifier {
     _voice.onChunk = (chunk) {
       _queue.add(chunk.absoluteUrl);
       unawaited(_drain());
+    };
+    // Reply emotion (:9100 voice:emotion) → drive the embedded Unity face's mood. The main screen has
+    // no UnityFaceBridge, so we forward straight to the live bridge (FlutterControlBridge.OnMessage).
+    _voice.onEmotion = (mood) {
+      AppLog.log('unity', '→setMood $mood');
+      try {
+        sendToUnity('FlutterFace', 'OnMessage', jsonEncode({'type': 'setMood', 'text': mood}));
+      } catch (e) {
+        AppLog.log('voice', 'setMood send failed: $e');
+      }
     };
     _player.onPlayerComplete.listen((_) {
       _playing = false;
