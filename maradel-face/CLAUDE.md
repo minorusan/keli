@@ -59,6 +59,15 @@ shows status + scale controls. THIS IS THE KNOWN-GOOD STATE.
 
 ## Change log
 
+- **Lip-sync from the streaming `voice:chunk` (confirmed root cause of the frozen mouth).** Unity log
+  piping revealed `[MaradelVoice] chunk … — ignored (voice:plan owns audio)` + `viseme dominant=Sil`.
+  The mic voice-loop streams the reply as `voice:chunk` and never sends `voice:plan`, so the old
+  `planDrivesAudio` gate discarded every chunk → visemes stuck on Sil. Fix: `MaradelVoiceSocketClient`
+  now ALWAYS enqueues `voice:chunk` to the feed (real-time audio+lipsync; silent because Unity voice is
+  muted via `outputSoundGain=0`, but uLipSync still analyzes it). `EmotionSequencer.PlayFaceAudio` no
+  longer re-enqueues the chunks (would double-play) — it just holds the face beat for the chunk
+  duration so emotion/camera timing still lines up. Removed the now-dead `planDrivesAudio` field.
+
 - **Forward Unity console → Flutter (`Bridge/FlutterControlBridge.cs`).** `OnEnable` hooks
   `Application.logMessageReceived` and re-emits each line as `Emit("log", {msg, level})` over the
   existing bridge → the Flutter app logs it as `[unity] …` (build 44 added the receive side). A static

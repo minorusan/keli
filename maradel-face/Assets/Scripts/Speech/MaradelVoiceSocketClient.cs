@@ -29,9 +29,8 @@ namespace Maradel.Speech
         [SerializeField] bool connectOnStart = true;
         [Tooltip("Log every connection change, speaking toggle, and chunk to the Console.")]
         [SerializeField] bool verboseLogging = true;
-        [Tooltip("Backend sends voice:plan (with chunks) AND voice:chunk. When true, the sequencer " +
-                 "(voice:plan) owns audio and voice:chunk is NOT enqueued here — prevents double audio.")]
-        [SerializeField] bool planDrivesAudio = true;
+        // NB: voice:chunk ALWAYS drives audio+lipsync in real time now (the mic loop sends no
+        // voice:plan); voice:plan drives only emotion/camera beats. (was: planDrivesAudio gate)
 
         public enum ConnState { Disconnected, Connecting, Connected, Error }
 
@@ -95,11 +94,12 @@ namespace Maradel.Speech
             _socket.OnUnityThread("voice:chunk", res =>
             {
                 var m = res.GetValue<ChunkMsg>();
-                if (planDrivesAudio)
-                {
-                    Log($"chunk #{m.index} ({m.durationSec:0.00}s) — ignored (voice:plan owns audio)");
-                    return; // the sequencer plays this chunk on the face beat; don't double-play
-                }
+                // The streaming voice:chunk drives BOTH audio AND lipsync in REAL TIME. We always
+                // enqueue it: the mic voice-loop sends ONLY chunks (no voice:plan), so ignoring them
+                // froze the mouth on Sil. Unity's own voice is muted (uLipSync outputSoundGain=0) so
+                // this is silent — the Flutter voice_player is the audible owner — but uLipSync still
+                // analyzes it → the mouth moves. voice:plan now drives ONLY emotion/camera beats
+                // (it no longer re-enqueues audio — see EmotionSequencer.PlayFaceAudio).
                 Log($"chunk #{m.index} ({m.durationSec:0.00}s) {config.FileUrl(m.url)}");
                 if (audioFeed != null) audioFeed.Enqueue(config.FileUrl(m.url), m.index, m.durationSec);
             });

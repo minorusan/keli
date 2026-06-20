@@ -24,6 +24,18 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 47,
+    version: '1.0.47',
+    date: '2026-06-20',
+    title: 'The mouth moves — lip-sync on spoken replies',
+    body: '''
+- **Fixed the frozen mouth.** The 3D face was *ignoring* the live voice chunks (it waited for an
+  end-of-reply "plan" that the talk-to-robot loop never sends), so the mouth stayed shut. Now the face
+  **lip-syncs from the streaming audio in real time** (analysed silently — you still hear the reply once,
+  from the app). Emotion/camera beats still time to the speech.
+''',
+  ),
+  ChangelogEntry(
     build: 46,
     version: '1.0.46',
     date: '2026-06-20',

@@ -228,13 +228,14 @@ namespace Maradel.Speech
 
         IEnumerator PlayFaceAudio(VoiceBeat beat)
         {
-            if (feed == null || beat.chunks == null || beat.chunks.Length == 0) yield break;
-            bool drained = false;
-            Action onDrained = () => drained = true;
-            feed.OnPlaybackDrained += onDrained;
-            foreach (var c in beat.chunks) feed.Enqueue(c.url, c.index, c.durationSec);
-            while (!drained) yield return null;
-            feed.OnPlaybackDrained -= onDrained;
+            if (beat.chunks == null || beat.chunks.Length == 0) yield break;
+            // Audio + lipsync are driven by the live voice:chunk stream (see MaradelVoiceSocketClient) —
+            // we must NOT re-enqueue here or the chunks would play twice. Just hold the face beat for
+            // the chunks' total duration so emotion/camera timing still lines up with the speech.
+            float dur = 0f;
+            foreach (var c in beat.chunks) dur += Mathf.Max(0f, c.durationSec);
+            if (dur <= 0f) dur = 1f;
+            yield return new WaitForSeconds(dur);
         }
     }
 }
