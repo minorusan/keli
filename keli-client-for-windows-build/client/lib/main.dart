@@ -47,10 +47,11 @@ class KeliApp extends StatelessWidget {
           update: (_, settings, vp) => (vp ?? VoicePlayer())..setVolume(settings.volume),
         ),
         // The robot's "ears": captures the mic and streams it continuously to Maradel while on.
-        // Muted while Maradel speaks (fed from VoicePlayer's :9100 voice:speaking, not :9120).
+        // Muted while Maradel's voice actually occupies the speaker (VoicePlayer.busy = voice:speaking
+        // OR audio still playing/queued) — not just voice:speaking — so the reply tail can't re-trigger.
         ChangeNotifierProxyProvider<VoicePlayer, MicStreamer>(
           create: (_) => MicStreamer(),
-          update: (_, voice, mic) => (mic ?? MicStreamer())..setSpeaking(voice.speaking),
+          update: (_, voice, mic) => (mic ?? MicStreamer())..setSpeaking(voice.busy),
         ),
       ],
       child: MaterialApp(

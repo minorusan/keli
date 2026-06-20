@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 50,
+    version: '1.0.50',
+    date: '2026-06-20',
+    title: 'No more talking over itself',
+    body: '''
+- The mic now stays muted **until the device actually finishes playing** Maradel's reply (not just when
+  the backend stops), plus a short **tail** — so the end of her reply can't leak back into the mic and
+  make her answer herself.
+- **Safety net:** the mic can never get **stuck silent** — if the "stopped speaking" signal is ever
+  lost, it auto-unmutes after a few seconds.
+- (Backend) speech-band **de-noising** before the VAD so it detects silence cleanly in a noisy room.
+''',
+  ),
+  ChangelogEntry(
     build: 49,
     version: '1.0.49',
     date: '2026-06-20',

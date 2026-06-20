@@ -44,6 +44,8 @@ class MicStreamer extends ChangeNotifier {
   Timer? _watchdog;
   Timer? _stableTimer;
   Timer? _healthTimer;
+  Timer? _muteTail; // keeps the mic muted briefly AFTER Maradel stops (swallow the reply's tail)
+  Timer? _muteSafety; // hard cap — never stay muted forever if the "stopped" signal is lost
   int _lastChunkMs = 0;
   int _connectedAt = 0;
   bool _reconnectScheduled = false;
@@ -78,11 +80,28 @@ class MicStreamer extends ChangeNotifier {
     } catch (_) {/* nothing persisted */}
   }
 
-  /// Fed from `:9100` `voice:speaking` (via the provider wiring). While true we stream silence.
+  /// Fed from VoicePlayer.busy (voice:speaking OR audio still playing/queued). While true we stream
+  /// silence so Maradel's own reply can't re-trigger the VAD (no AEC). On stop we keep muted for a
+  /// short TAIL (reverb/queue settle), and a SAFETY timer guarantees we never stay muted forever if the
+  /// "stopped" signal is ever lost (the "mic went silent and never came back" failure).
   void setSpeaking(bool on) {
-    if (on == _maradelSpeaking) return;
-    _maradelSpeaking = on;
-    notifyListeners();
+    if (on) {
+      _muteTail?.cancel();
+      _muteTail = null;
+      _muteSafety?.cancel();
+      _muteSafety = Timer(const Duration(seconds: 25), () {
+        if (_maradelSpeaking) { _maradelSpeaking = false; notifyListeners(); }
+      });
+      if (!_maradelSpeaking) { _maradelSpeaking = true; notifyListeners(); }
+    } else {
+      if (!_maradelSpeaking || _muteTail != null) return; // already unmuting / unmuted
+      _muteTail = Timer(const Duration(milliseconds: 600), () {
+        _muteTail = null;
+        _muteSafety?.cancel();
+        _maradelSpeaking = false;
+        notifyListeners();
+      });
+    }
   }
 
   /// Turn the ears on/off. Persisted across restarts.
@@ -360,6 +379,8 @@ class MicStreamer extends ChangeNotifier {
     _watchdog?.cancel();
     _stableTimer?.cancel();
     _healthTimer?.cancel();
+    _muteTail?.cancel();
+    _muteSafety?.cancel();
     _audioSub?.cancel();
     try {
       _recorder.dispose();

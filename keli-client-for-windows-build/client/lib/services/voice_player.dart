@@ -27,6 +27,12 @@ class VoicePlayer extends ChangeNotifier {
   /// True between `voice:speaking{on:true/false}` — drives the mic echo-guard.
   bool get speaking => _speaking;
 
+  /// Whether Maradel's voice is ACTUALLY occupying the speaker right now — the backend's
+  /// `voice:speaking` flag OR audio still playing/queued locally. The mic echo-guard uses THIS (not
+  /// `speaking`) so the mic stays muted until the device finishes draining the reply, not just until
+  /// the backend stops synthesizing — otherwise the tail leaks back into the mic and self-triggers.
+  bool get busy => _speaking || _playing || _queue.isNotEmpty;
+
   /// Whether the `:9100` voice socket is connected.
   bool get connected => _connected;
 
@@ -60,6 +66,7 @@ class VoicePlayer extends ChangeNotifier {
     _player.onPlayerComplete.listen((_) {
       _playing = false;
       unawaited(_drain());
+      notifyListeners(); // so `busy` flips false when the queue has fully drained (drives mic un-mute)
     });
   }
 
