@@ -24,6 +24,18 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 53,
+    version: '1.0.53',
+    date: '2026-06-20',
+    title: 'Maradel sees — live perception panel',
+    body: '''
+- New **"MARADEL SEES"** floating panel (top-right, draggable). Every ~5 minutes Maradel looks through
+  the roomba's **Tapo** and **USB** cameras, describes what she sees on each, notes **whether a person is
+  present**, and shows her best guess of **which room the roomba is in**.
+- Same perception also drives the voice level (quieter when a person is seen) and shows in maradel-status.
+''',
+  ),
+  ChangelogEntry(
     build: 52,
     version: '1.0.52',
     date: '2026-06-20',

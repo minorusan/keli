@@ -27,6 +27,8 @@ class KeliConnection extends ChangeNotifier {
   String _detail = 'connecting…';
   double? _pendingVolume; // last `set_volume` command value (consumed by KeliSettings via the proxy)
   double? get pendingVolume => _pendingVolume;
+  Map<String, dynamic>? _perception; // latest perception snapshot {at,tapo,usb,location,present}
+  Map<String, dynamic>? get perception => _perception;
   final List<IncomingCommand> _commands = []; // push windows, newest first
   final List<IncomingCommand> _requests = []; // interactive requests, FIFO (active = first)
 
@@ -142,6 +144,15 @@ class KeliConnection extends ChangeNotifier {
       _pendingVolume = v;
       AppLog.log('conn', 'set_volume → $v');
       notifyListeners();
+    });
+
+    // Perception snapshot (Maradel's ambient-vision loop → this Keli). Latest-wins; shown in a panel.
+    _socket.on('perception', (data) {
+      if (data is Map) {
+        _perception = Map<String, dynamic>.from(data);
+        AppLog.log('conn', 'perception → loc=${_perception?['location']} present=${_perception?['present']}');
+        notifyListeners();
+      }
     });
 
     _socket.connect();

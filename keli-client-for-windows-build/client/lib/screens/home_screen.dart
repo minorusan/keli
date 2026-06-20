@@ -18,6 +18,7 @@ import '../theme.dart';
 import '../widgets/registration_dialog.dart';
 import '../widgets/skin_picker.dart';
 import '../widgets/mic_status_bar.dart';
+import '../widgets/perception_window.dart';
 import '../widgets/tapo_cam_window.dart';
 import '../widgets/update_button.dart';
 import 'changelogs_page.dart';
@@ -299,6 +300,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           // Live Tapo cam window — draggable (position not saved), top-left.
           const TapoCamWindow(),
+          // What Maradel currently sees + where she thinks she is (perception loop), top-right.
+          const PerceptionWindow(),
           // Interactive request from Maradel — one at a time over a scrim.
           if (conn.activeRequest != null)
             _RequestOverlay(
