@@ -339,6 +339,23 @@ class _MicTestBarState extends State<_MicTestBar> {
     _toast('Logs copied to clipboard');
   }
 
+  /// Upload this session's log to the lab share as a plain file (same PUT path as the mic-test clip),
+  /// so it can be read on nukshare/the watcher without going through Maradel's chat.
+  Future<void> _shareLogs() async {
+    final name = 'keli-log-${DateTime.now().millisecondsSinceEpoch}.log';
+    try {
+      final res = await http
+          .put(Uri.parse('$kShareBaseUrl/$name'), headers: const {'content-type': 'text/plain; charset=utf-8'}, body: AppLog.text())
+          .timeout(const Duration(seconds: 30));
+      final ok = res.statusCode >= 200 && res.statusCode < 300;
+      AppLog.log('logs', ok ? 'shared logs → share/$name' : 'share failed: HTTP ${res.statusCode}');
+      _toast(ok ? 'Logs shared: $name' : 'Share failed (${res.statusCode})');
+    } catch (e) {
+      AppLog.log('logs', 'share failed: $e');
+      _toast('Share failed');
+    }
+  }
+
   void _toast(String m) {
     if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(m)));
   }
@@ -386,6 +403,8 @@ class _MicTestBarState extends State<_MicTestBar> {
           ],
           const Spacer(),
           _miniBtn(Icons.copy, 'Copy logs', _copyLogs),
+          const SizedBox(width: 6),
+          _miniBtn(Icons.ios_share, 'Share logs', _shareLogs),
         ],
       ),
     );

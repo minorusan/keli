@@ -24,6 +24,16 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 39,
+    version: '1.0.38',
+    date: '2026-06-20',
+    title: 'Share logs',
+    body: '''
+- New **Share logs** button in the logs panel (next to Copy): uploads this session's log to the lab
+  share as a file (`keli-log-<time>.log`), so it can be opened on nukshare without pasting into chat.
+''',
+  ),
+  ChangelogEntry(
     build: 38,
     version: '1.0.37',
     date: '2026-06-20',
