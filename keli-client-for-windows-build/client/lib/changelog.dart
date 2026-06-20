@@ -24,6 +24,25 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 40,
+    version: '1.0.40',
+    date: '2026-06-20',
+    title: 'Mic actually transmits',
+    body: '''
+Fixes the mic streaming nothing to Maradel even though it looked connected.
+
+- **Send a contiguous copy of each audio chunk.** The recorder hands the app
+  buffer *views*; sending a view over the WebSocket could transmit **zero
+  bytes** — which is exactly what was happening (the app logged "first chunk"
+  and showed connected, but the backend received nothing).
+- **Disable WebSocket compression** (Dart enables permessage-deflate by default,
+  which mis-framed the binary audio against the server).
+- **Stall watchdog:** if the recorder goes silent for >4s, capture restarts
+  automatically (some devices deliver a chunk then stop).
+- Added a 3s health log (chunks captured/sent) for diagnostics.
+''',
+  ),
+  ChangelogEntry(
     build: 39,
     version: '1.0.38',
     date: '2026-06-20',

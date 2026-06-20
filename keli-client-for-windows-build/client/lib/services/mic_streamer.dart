@@ -43,6 +43,8 @@ class MicStreamer extends ChangeNotifier {
   bool _gotAudio = false;
   Timer? _watchdog;
   Timer? _stableTimer;
+  Timer? _healthTimer;
+  int _lastChunkMs = 0;
   int _connectedAt = 0;
   bool _reconnectScheduled = false;
   int _backoffMs = 1000;
@@ -156,6 +158,8 @@ class MicStreamer extends ChangeNotifier {
           notifyListeners();
         }
       });
+      _healthTimer?.cancel();
+      _healthTimer = Timer.periodic(const Duration(seconds: 3), (_) => _checkStream());
     } catch (e) {
       _enabled = false;
       _starting = false;
@@ -173,6 +177,7 @@ class MicStreamer extends ChangeNotifier {
     _detail = 'off';
     _watchdog?.cancel();
     _stableTimer?.cancel();
+    _healthTimer?.cancel();
     _reconnectScheduled = false;
     _backoffMs = 1000;
     _gotAudio = false;
@@ -198,6 +203,7 @@ class MicStreamer extends ChangeNotifier {
   // ── mic → WebSocket ──
   void _onPcm(Uint8List bytes) {
     if (!_enabled) return;
+    _lastChunkMs = DateTime.now().millisecondsSinceEpoch; // recorder delivered → used by the stall check
     if (!_gotAudio) {
       _gotAudio = true;
       _watchdog?.cancel();
@@ -207,7 +213,10 @@ class MicStreamer extends ChangeNotifier {
     levelVN.value = _level;
     final ws = _ws;
     if (ws == null) return; // not connected yet → drop this slice
-    final out = _maradelSpeaking ? Uint8List(bytes.length) : bytes; // silence while Maradel talks
+    // Send a CONTIGUOUS copy. The recorder hands us Uint8List VIEWS into a shared/reused buffer; adding
+    // a typed-data view to a dart:io WebSocket could transmit nothing or the wrong region on some SDKs
+    // (the bug we chased: client logged "first chunk" + ws.add with no error, yet 0 bytes hit the wire).
+    final out = _maradelSpeaking ? Uint8List(bytes.length) : Uint8List.fromList(bytes);
     try {
       ws.add(out); // binary frame
       _chunksSent++;
@@ -216,6 +225,32 @@ class MicStreamer extends ChangeNotifier {
       AppLog.log('mic', 'ws write failed: $e');
       _dropSocket();
     }
+  }
+
+  /// Heartbeat (every 3s while ears are on): logs how much we've actually captured + sent, and
+  /// restarts the recorder if it has gone silent. On some devices `record.startStream` delivers a
+  /// chunk or two then stalls; without this the mic looks "on" but feeds nothing.
+  void _checkStream() {
+    if (!_enabled || _disposed) return;
+    final since = _lastChunkMs == 0 ? -1 : DateTime.now().millisecondsSinceEpoch - _lastChunkMs;
+    AppLog.log('mic', 'stream health: chunksSent=$_chunksSent sinceLastChunk=${since}ms wsConnected=$_connected');
+    if (_gotAudio && since > 4000) {
+      AppLog.log('mic', 'recorder stalled (${since}ms no PCM) — restarting capture');
+      unawaited(_restartCapture());
+    }
+  }
+
+  Future<void> _restartCapture() async {
+    try {
+      await _audioSub?.cancel();
+    } catch (_) {}
+    _audioSub = null;
+    try {
+      await _recorder.stop();
+    } catch (_) {}
+    _gotAudio = false;
+    _lastChunkMs = 0;
+    if (_enabled && !_disposed) await _start();
   }
 
   // ── WebSocket lifecycle (connect + reconnect w/ backoff) ──
@@ -227,7 +262,9 @@ class MicStreamer extends ChangeNotifier {
     try {
       final dev = await _deviceId();
       final url = '$kMaradelAudioWsUrl?deviceId=${Uri.encodeQueryComponent(dev)}';
-      final ws = await WebSocket.connect(url).timeout(const Duration(seconds: 8));
+      // compressionOff: Dart's dart:io WebSocket negotiates permessage-deflate by default, which can
+      // mis-frame outgoing binary against the `ws` server (frames silently dropped). Send raw.
+      final ws = await WebSocket.connect(url, compression: CompressionOptions.compressionOff).timeout(const Duration(seconds: 8));
       _ws = ws;
       _connected = true;
       _connecting = false;
@@ -314,6 +351,7 @@ class MicStreamer extends ChangeNotifier {
     _disposed = true;
     _watchdog?.cancel();
     _stableTimer?.cancel();
+    _healthTimer?.cancel();
     _audioSub?.cancel();
     try {
       _recorder.dispose();
