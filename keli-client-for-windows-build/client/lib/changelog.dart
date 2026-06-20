@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 52,
+    version: '1.0.52',
+    date: '2026-06-20',
+    title: 'Master voice level + ambient loudness',
+    body: '''
+- The bottom status bar now shows **Maradel's master voice level** here — a speaker icon + percentage,
+  so you can see at a glance how loud the tablet will speak right now.
+- That level is driven by Maradel's new **ambient-volume brain**: she watches camera presence + the time
+  of day and keeps her voice at the lowest of the configured caps — quieter when someone's in the room,
+  quieter at night, louder when the place is empty. The tablet follows the room speaker automatically
+  (pushed via the `set_volume` command). All the caps live in the Maradel settings dashboard.
+''',
+  ),
+  ChangelogEntry(
     build: 51,
     version: '1.0.51',
     date: '2026-06-20',

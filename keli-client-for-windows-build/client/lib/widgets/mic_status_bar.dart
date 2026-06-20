@@ -12,6 +12,7 @@ import 'package:record/record.dart';
 
 import '../app_log.dart';
 import '../config.dart';
+import '../services/keli_settings.dart';
 import '../services/mic_streamer.dart';
 import '../theme.dart';
 
@@ -70,6 +71,8 @@ class _MicStatusBarState extends State<MicStatusBar> {
               Text(stateText, style: TextStyle(color: stateColor, fontSize: 12, fontWeight: FontWeight.w600)),
               const SizedBox(width: 10),
               if (on) _ChunkCounter(chunks: mic.chunksVN),
+              const SizedBox(width: 10),
+              const _VoiceLevelReadout(),
               const SizedBox(width: 10),
               Expanded(
                 child: ValueListenableBuilder<int>(
@@ -131,6 +134,32 @@ class _VuMeter extends StatelessWidget {
           }),
         );
       },
+    );
+  }
+}
+
+/// Maradel's current master voice level (how loud she speaks here) — driven by the ambient-volume
+/// brain (presence + time of day) via the `set_volume` command. Always shown so the user can see at
+/// a glance how loud the tablet will speak right now.
+class _VoiceLevelReadout extends StatelessWidget {
+  const _VoiceLevelReadout();
+
+  @override
+  Widget build(BuildContext context) {
+    final vol = context.watch<KeliSettings>().volume;
+    final pct = (vol * 100).round();
+    final icon = vol <= 0.001
+        ? Icons.volume_off
+        : (vol < 0.5 ? Icons.volume_down : Icons.volume_up);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 15, color: KeliTheme.muted),
+        const SizedBox(width: 3),
+        Text('$pct%',
+            style: const TextStyle(
+                color: KeliTheme.text, fontSize: 12, fontFeatures: [FontFeature.tabularFigures()])),
+      ],
     );
   }
 }
