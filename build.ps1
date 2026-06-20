@@ -101,11 +101,22 @@ Log "built $apkName ($mb MB)"
 
 # 5 -- upload to nukshare (egregor-share :7777) -----------------------------
 if (-not $NoUpload) {
+    # (a) versioned archive copy
     Log "uploading -> $Share/$apkName"
     $code = (& curl.exe -s -m 600 -T $Apk "$Share/$apkName" -w '%{http_code}' -o "$LogDir\upload-$Stamp.json")
     Log "upload HTTP $code"
     if ($code -notmatch '^2\d\d$') { Die "upload failed (HTTP $code)" }
     Log "uploaded: $Share/$apkName"
+
+    # (b) AUTO-UPDATE channel — the Keli backend serves ~/shared/keli/{keli.apk,version.json};
+    #     the installed app polls /version.json and pulls /keli.apk when build is higher.
+    Log "publishing auto-update -> $Share/keli/keli.apk + version.json (v$($parts[0]) build $($parts[1]))"
+    $ca = (& curl.exe -s -m 600 -T $Apk "$Share/keli/keli.apk" -w '%{http_code}' -o "$LogDir\upd-apk-$Stamp.txt")
+    $verFile = Join-Path $LogDir "version-$Stamp.json"
+    Set-Content -Path $verFile -Value ('{"version":"' + $parts[0] + '","build":' + $parts[1] + '}') -NoNewline -Encoding ascii
+    $cv = (& curl.exe -s -m 60 -T $verFile "$Share/keli/version.json" -w '%{http_code}' -o "$LogDir\upd-ver-$Stamp.txt")
+    Log "auto-update: keli.apk HTTP $ca, version.json HTTP $cv"
+    if ($ca -notmatch '^2\d\d$' -or $cv -notmatch '^2\d\d$') { Die "auto-update publish failed (apk $ca, version $cv)" }
 } else {
     Log "skipping upload (-NoUpload)"
 }

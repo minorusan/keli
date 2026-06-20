@@ -24,6 +24,17 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 45,
+    version: '1.0.45',
+    date: '2026-06-20',
+    title: 'Avatar button + clean black face',
+    body: '''
+- **Avatar/skin picker** is a visible **face icon in the top bar** → searchable list → tap to swap.
+- Removed the **teal-green glow halo** around the 3D face — clean black now.
+- (Tooling) build.ps1 now also publishes the auto-update channel (keli/keli.apk + version.json).
+''',
+  ),
+  ChangelogEntry(
     build: 44,
     version: '1.0.44',
     date: '2026-06-20',

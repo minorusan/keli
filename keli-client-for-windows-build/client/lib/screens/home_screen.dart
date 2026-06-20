@@ -225,6 +225,12 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Keli', style: TextStyle(letterSpacing: 2, fontWeight: FontWeight.w700)),
         actions: [
+          // Choose the 3D face avatar/skin (asks Unity for the list → searchable picker).
+          IconButton(
+            tooltip: 'Choose avatar / skin',
+            icon: const Icon(Icons.face_retouching_natural, color: KeliTheme.accent),
+            onPressed: () => showSkinPicker(context),
+          ),
           // Quick "ears" toggle — stream the mic to Maradel (the robot's ears).
           Consumer<MicStreamer>(
             builder: (_, mic, _) => IconButton(
@@ -358,12 +364,9 @@ class _FaceStage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: KeliTheme.glow(blur: 36, alpha: 0.35),
-                  ),
-                  child: ClipRRect(
+                // No glow/halo around the face — clean black, per request (the teal-green glow read
+                // as a "green overlay" around the Unity widget).
+                ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: SizedBox(
                       width: side,
@@ -376,7 +379,6 @@ class _FaceStage extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
