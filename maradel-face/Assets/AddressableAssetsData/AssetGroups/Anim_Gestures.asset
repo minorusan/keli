@@ -1,0 +1,492 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Anim_Gestures
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Anim_Gestures
+  m_GUID: 3d3b8c874e57292428cf25f0429590ac
+  m_SerializeEntries:
+  - m_GUID: 025f7380834a68e4089a578011e3d79a
+    m_Address: f_gestic_talk_cool
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b04a42b72c4df44383ea131d1b2651f
+    m_Address: m_cheer_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 134b6ca1e7221e04f8f964b0417c4c21
+    m_Address: m_gestic_listen_accept_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14c6b269c2bb36345867e72dcb2df6a9
+    m_Address: m_idle_neutral_06
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15328f6d437b6514799f9658af03dea3
+    m_Address: f_gestic_listen_nervous_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c0db0ae4b985584da8df66521764505
+    m_Address: m_gestic_listen_deny_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1c948e8c521d69d49a0de3561a91cfb6
+    m_Address: f_idle_neutral_04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 217c6455f13d8af43933eac36c7bc627
+    m_Address: m_idle_touch_hair_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21f795823a600fd4dae2fac46c165c65
+    m_Address: m_gestic_shrug_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2888a448265c8c64d999d183c1f5807b
+    m_Address: m_gestic_listen_accept_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28ad702772786d2488a5eb3e2cea2f54
+    m_Address: f_idle_neutral_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28ae2491f76a471448bee0ac88c395cc
+    m_Address: m_gestic_listen_neutral_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d3e842d64a4d9b488e99bcc44b08f41
+    m_Address: f_idle_waiting_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c8c3c32692bc3046b9f28d9a95b1bb1
+    m_Address: f_idle_neutral_05
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3db760191450d574ab478635b77713c5
+    m_Address: m_gestic_talk_cool
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ec20e9b673652b428af6469bd7cd6fc
+    m_Address: m_gestic_laugh_low
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 44813122229501d4daf206bb29f4f646
+    m_Address: f_idle_roll_head_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 46fb6427585c6dc46a645e86a96a74bf
+    m_Address: f_gestic_listen_self-assured_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 473cbc115c5eef94ba6e8e6dbad9f77e
+    m_Address: m_idle_neutral_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49da49bedb2e7484cac05dfcf7b7a7e0
+    m_Address: m_idle_neutral_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 517b50effae4cac46b6bde07a5b8a3fa
+    m_Address: f_idle_look_around_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52bfff0d5e69b6f448749bffc1747d74
+    m_Address: m_idle_breathe_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5666c3b1b8d02ce449b1df19f9be6cbc
+    m_Address: f_gestic_listen_excited_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 569d54d5c22c862468e03e3794cd0cb0
+    m_Address: m_idle_look_around_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58c08e1167607814b818cb9ff46fcaf7
+    m_Address: f_idle_neutral_06
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a062e95987a9794798364ce3a34b673
+    m_Address: m_gestic_listen_excited_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d57dc7b5187f3643895d99e8ea76c61
+    m_Address: f_idle_look_around_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 614189742f06bd1439a8bf7358a05bbd
+    m_Address: f_idle_breathe_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6dff83de5c805604a937545425aaa501
+    m_Address: f_gestic_listen_sad_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6eb4c31834c122042afa95b9a079d6e0
+    m_Address: m_idle_yawn_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6f3e8f9481057aa49b923849595fd167
+    m_Address: m_idle_waiting_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7210e4c7261335547956ac6757a9c10c
+    m_Address: m_idle_stretch_arms_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 739b42230f2e32444b2bbcdea9b6f51d
+    m_Address: f_idle_neutral_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7418afaa9b56a3e49a446b45bcb99056
+    m_Address: m_idle_neutral_04
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 76b1b566c56d76e44a1df3c232be1480
+    m_Address: m_idle_neutral_05
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 78f9157ea69694d42bc383f9ac201aa3
+    m_Address: f_idle_scratch_head_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d669f08b38a5ec46bde94be321d93bc
+    m_Address: f_idle_yawn_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 808cdc87d96aa55418175c33aa320716
+    m_Address: f_gestic_listen_neutral_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 857413cc576c9424aa110c17981d7e59
+    m_Address: f_gestic_laugh_low
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 858324bb4a8df244aad2e624b0833846
+    m_Address: f_gestic_listen_angry_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87a34aa5062bd93459b2d5022a02f2e1
+    m_Address: f_idle_breathe_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 96fc613c7ff536f4e8f8c98a3f2b1c64
+    m_Address: m_gestic_listen_nervous_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cef297ddc92a084a9828eeb3429f480
+    m_Address: f_gestic_listen_accept_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9fc57a8503434354aa62c174727d6b3f
+    m_Address: m_idle_look_around_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a218ccbee2534bb40b8828f4225699d4
+    m_Address: m_gestic_listen_angry_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a2fbcd19f7233334fabe3210b41abba7
+    m_Address: f_idle_stretch_arms_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6fbcacc92a9e4240bb58764bfee61df
+    m_Address: f_idle_shake_arms_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aeb4134836b71c845bb9750e6fe883f9
+    m_Address: m_idle_shake_arms_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf64a6cb4bd34524da20ab7744cd67e0
+    m_Address: f_gestic_listen_accept_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7440016b2ef15f4aa306e65dc448587
+    m_Address: f_idle_look_around_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7ee83bc138e2c2449eb47b545f66ad6
+    m_Address: m_gestic_thoughtful_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc483bcab2be0a94a83c635ae1611bcd
+    m_Address: f_gestic_shrug_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cceb7ff2cdf002a42b89b64e45841b0b
+    m_Address: f_gestic_listen_deny_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d04697c470e427e428b22b69a3f38ec7
+    m_Address: f_idle_touch_hair_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1591e572e124b947a1ff39c025cf49a
+    m_Address: f_idle_neutral_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d336a52b5c1476f4dbcb61321dda7ea0
+    m_Address: m_idle_roll_head_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d52794e8696f0414db8c02c76fd99538
+    m_Address: m_idle_neutral_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9f4474cb8757d64996ae53c2fcf9037
+    m_Address: m_idle_breathe_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dbd6d01b5cdcfc845a1b4b6f8593eaee
+    m_Address: f_claphands_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1dfec4dd38c38845a7abcfbde1aae55
+    m_Address: m_gestic_listen_sad_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed986e6c473b8514496aae7e840fd9f7
+    m_Address: f_cheer_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f1b8983b5e9c6444aacce52de1b85ddf
+    m_Address: m_idle_look_around_02
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4210abe88ef2534794cef1a8557f3b9
+    m_Address: m_idle_scratch_head_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7a7cddc1fc94e14ea825d5493945c60
+    m_Address: f_idle_breathe_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fa986524f164e7b4fae4688ba849b448
+    m_Address: f_gestic_thoughtful_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fb1ee6decea081d4a91fdc506592bd38
+    m_Address: m_idle_breathe_03
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fdfec078c7342b44197d11890cf65dd7
+    m_Address: m_claphands_01
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - anim
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fcd74ef992b5f3746bfd39cb36af8790, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 287c4413173f63c4e8bd530aa0beb64a, type: 2}
+    - {fileID: 11400000, guid: fff6d2c0fb1c38a4e97a8db24903ad5e, type: 2}

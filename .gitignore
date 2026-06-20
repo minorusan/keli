@@ -1,0 +1,15 @@
+# ── Repo root — covers the Unity project (maradel-face/) and the Flutter app
+#    (keli-client-for-windows-build/). Each also has its own .gitignore. ──
+
+# Generated Unity → Flutter export (rebuilt by build.ps1 → mirrored into the Flutter app).
+/unity-artifact/
+
+# Build pipeline logs + upload responses
+/build-logs/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.log

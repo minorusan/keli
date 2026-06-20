@@ -1,0 +1,463 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Models_Professions
+  m_EditorClassIdentifier: 
+  m_GroupName: Models_Professions
+  m_Data:
+    m_SerializedData: []
+  m_GUID: f5751285cedc2384aa56391e8e144074
+  m_SerializeEntries:
+  - m_GUID: 03dba8b34e58c9c48b1246d7fb6533ca
+    m_Address: Construction_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0ad1932b1da7e1e4b9809d1912a8b7f7
+    m_Address: Fire_Male_07_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f1d1af39a3e6c645bb1f64f787eeb13
+    m_Address: Pilot_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 147e3201dd058444e9144a6e8e6557ad
+    m_Address: Military_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14eb94d1fe29cba4d846e4741bc3cc99
+    m_Address: Sports_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16808f8ba7ebd774fb31159d9d6f56d1
+    m_Address: Delivery_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a4b98ff3ead01847916b84b92283892
+    m_Address: Business_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ac42257b2555d34ba8bf447f2cbb12f
+    m_Address: Police_Male_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d40cfc12dabec94aa5d7bfc41bdbe98
+    m_Address: Military_Male_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1ebb6f44e3e05bd48a9c7f641ac97bbe
+    m_Address: Military_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20d7ce0db6a865f4e996a4f63068e826
+    m_Address: Medical_Male_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21f4f9567919b78408bee681aa7a0f8f
+    m_Address: Female_Party_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24cf58c271e2cfe4aa0aeb8d45a1de87
+    m_Address: Medical_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a0d196e9cb61d9409b933abd385245b
+    m_Address: Police_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b77b9e2e81a89c44b9ffd0716d6ac2b
+    m_Address: Construction_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bb88c2644e468e47b3616135900609d
+    m_Address: Business_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3171e53fe23c679478ef95d568139895
+    m_Address: Pilot_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31927847ac2ca9d4eb19220e9a14b938
+    m_Address: Chef_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3555b98a47243eb4d8fdfadd01d6cc26
+    m_Address: Business_Male_07_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 391bd40eb7933bb48a213240bdc663e7
+    m_Address: Medical_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3edd6836670567f40ad21f74c8844d8c
+    m_Address: Fire_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40f141eec30b71c43a62143ac5662dbc
+    m_Address: Business_Female_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 496cf016c94d8b1489f7639fa7ab0251
+    m_Address: Medical_Female_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 555e0182570fdf947a5abec69fcb794f
+    m_Address: Military_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5a295545b0fe538408d526ff27ec0dc2
+    m_Address: Gardener_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 605e5062fb9bec24cbeaa6f497429d1b
+    m_Address: Business_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 65c69fc94d7771649bfd33f752cbcb9e
+    m_Address: Construction_Male_07_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 683e4037bfd06d14981b1e1f7477bb1c
+    m_Address: Police_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 68469123f4d8fe44e81a0e375acf75c4
+    m_Address: Fire_Female_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b96d32c4dd77744080a6dcf0762f7c4
+    m_Address: Medical_Male_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6bb8ef17957f46342bcf5a7550d6a83c
+    m_Address: Medical_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6fe3c76092076284ba5f67dcc171611b
+    m_Address: Military_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 77b4d357bfcefb44087dcf8671445284
+    m_Address: Female_Party_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 783c8e1061074494e9a0ae31956d1531
+    m_Address: Sports_Male_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7d3c5cf38deda124484da4ca9e458603
+    m_Address: Police_Male_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8828324c43e41a34e8c80d4a2cedeaf6
+    m_Address: Fire_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8882adf02ecc663438e260b226586cd7
+    m_Address: Pilot_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8e4b16711c7836d4baaf03b05bd6967d
+    m_Address: Business_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8ea46ad13304faf4384100a712e89e9e
+    m_Address: Security_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9853b7bb5973fdc4c9353256327d74bf
+    m_Address: Medical_Female_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a14c12d7222181f489678e8f232a7e33
+    m_Address: Construction_Male_08_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aac78182ba0559647a16684542c242f6
+    m_Address: Wood_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acc539e192b82524bb4c88494fd56175
+    m_Address: Police_Male_07_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aef4d4fe27b43224ebe4a190a85e1847
+    m_Address: Fire_Male_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: af18210e1eb46a544b51ec53f495e5ef
+    m_Address: Business_Female_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afc2bb3292b12fe46b596dbf9c34fa33
+    m_Address: Construction_Male_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b65749bfcc5eff14aa23f2f8bb38ca8e
+    m_Address: Police_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b89e688bb49d13f4892b028b58a256d7
+    m_Address: Sports_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bc44d67b7ef92c44b834b26c375ebbdb
+    m_Address: Pilot_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf6063ecfaa139a42b5a23216727efce
+    m_Address: Sports_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c17bde974149bd84ba1e19182c5eab4f
+    m_Address: Sports_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3da2416be048bc4eb9fb65e1e71f03e
+    m_Address: Fire_Female_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c8936817cf02c974ca3f9c4420a003d2
+    m_Address: Fire_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c95a2d834aee8784fa7af3ba3d236427
+    m_Address: Military_Male_06_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c9d88b1ae29ce84469ec3dfc88f3e923
+    m_Address: Construction_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cbe87b976f6c10845b9bf3819d92d1b9
+    m_Address: Medical_Male_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccf5186d24754d947a4cc01799f2261e
+    m_Address: Business_Male_06_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce1a25aa70d7f3141b8df71ab9946db1
+    m_Address: Military_Male_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d0c1d8940a1c3bf4b9808345f39367d2
+    m_Address: Business_Male_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d1a3ccfd447b3a3438b3bd820c1de03e
+    m_Address: Fire_Female_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d57238186df82cb4f9be2d5fc600bce7
+    m_Address: Security_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da26c6ca608742d48acc5b3d210af1b2
+    m_Address: Business_Female_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db3639d2387e17447ae07ef347f2b741
+    m_Address: Police_Male_06_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc4489799fd1c5044bc6d18832bdc13b
+    m_Address: Fire_Male_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dc9c873863c23fc42a99d77958f7cfc1
+    m_Address: Construction_Male_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de70c7b153611a847b7a40d70c69b2c3
+    m_Address: Fire_Male_06_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e62734b6cf6e02946a044ee6e6039106
+    m_Address: Construction_Male_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e741aa3d43fdc8f48b2a682e89ffd0c7
+    m_Address: Police_Male_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f25bda10f91012f458e81007c54e1937
+    m_Address: Pilot_Female_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f57ee142b90021643a0858a571554d80
+    m_Address: Construction_Male_06_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5f048cfb9488db4ea6e7714cfa63ad0
+    m_Address: Sports_Female_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f81329961e364234c8aa712a75ec8aeb
+    m_Address: Military_Female_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff54ab3410c2ca442832327a7195ef8d
+    m_Address: Business_Male_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fcd74ef992b5f3746bfd39cb36af8790, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 460e1b0fa8f6b2a44975232c4a5fea59, type: 2}
+    - {fileID: 11400000, guid: 9378006950b596c4b9cf0be50f42eeba, type: 2}

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Models_Children
+  m_EditorClassIdentifier: 
+  m_GroupName: Models_Children
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 2bfac792381fe654d99ae2d0cde27736
+  m_SerializeEntries:
+  - m_GUID: 081930a395d0ab44bbc94d3bca4cf7e2
+    m_Address: Male_Child_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c2b41bbf124946448000b7a821d41af
+    m_Address: Female_Child_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 92b239f99e108094799e25aa4d726553
+    m_Address: Male_Child_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8686413e4fdce54e90ff088b5bb18c6
+    m_Address: Female_Child_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fcd74ef992b5f3746bfd39cb36af8790, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: cf21ff73e9e454d4a884fd5cad173c7f, type: 2}
+    - {fileID: 11400000, guid: be7e29ff30f2cea42997d1d337030e04, type: 2}

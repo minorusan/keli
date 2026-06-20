@@ -1,0 +1,266 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Models_Adults
+  m_EditorClassIdentifier: 
+  m_GroupName: Models_Adults
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bdb06a81fc1908345b649dc82e8b2362
+  m_SerializeEntries:
+  - m_GUID: 097cf7b84b04041448aabcc35f72d27a
+    m_Address: Female_Adult_13_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 126043ceaa668564da7cfa1f89128b5a
+    m_Address: Female_Adult_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    - essential
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 136e23ba1260a7547a296a19a83a43a7
+    m_Address: Female_Adult_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 17eed3e045bf6884bb9cf995c13b991d
+    m_Address: Female_Adult_14_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1affe3db3c3d9a54f89aefcc6b30dd79
+    m_Address: Male_Adult_21_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cb1becc6012ed74aa1c84e51adceabb
+    m_Address: Male_Adult_13_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21378c941ba313843a9579b20f92bebc
+    m_Address: Male_Adult_07_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 289244888ac5cad4f9566069f042e98a
+    m_Address: Female_Adult_08_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35cb9279c17eb2c45aa83aadbe38353e
+    m_Address: Female_Adult_16_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c33684ee317ad647a260fe7ae07f7f8
+    m_Address: Male_Adult_11_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 45574d1c254ec924794afa65a29a8127
+    m_Address: Male_Adult_17_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4674f85819fd98e4cb94251d02893ae3
+    m_Address: Male_Adult_05_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 49e1dc1bef418d54793d4718400b3932
+    m_Address: Male_Adult_19_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b9d0baf22ff2bb4ab02aa0735d8b17c
+    m_Address: Male_Adult_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51f67b28f8e66524ea80e31d100a8a2f
+    m_Address: Male_Adult_08_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52f47a26d7d47e74d916387dd2012ad0
+    m_Address: Female_Adult_12_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58d35e99191df0a4b9a7ca10776fd806
+    m_Address: Female_Adult_07_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5fd668f98cf02c34eb5b343b3df9cd43
+    m_Address: Male_Adult_09_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6899bf755d7208745941cb61f365abd2
+    m_Address: Male_Adult_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69d643284e0c6e843b7b4c33d9c5c0cf
+    m_Address: Male_Adult_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6cfe67ce3c7c19a489dd086d57bee407
+    m_Address: Male_Adult_20_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 771deeaf47454054888dc3254cf97a18
+    m_Address: Male_Adult_10_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 837c6124d90effe4eac7e86775f3b53d
+    m_Address: Male_Adult_12_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8467555281be4e1418ca396abcd4a283
+    m_Address: Female_Adult_06_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 84fb86632a7d7e7419d4b8f4ae63ba00
+    m_Address: Male_Adult_06_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87a0fb455a5d3054b8bbb22fad8d4691
+    m_Address: Female_Adult_11_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 887c0e63e2fea96409a6999fb8cdbec8
+    m_Address: Female_Adult_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88985c9865a82f245b15d0e125cf626a
+    m_Address: Female_Adult_09_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 923034f7c0293db4ba9a24e83384d187
+    m_Address: Female_Adult_17_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9eecad96a42df3d4f95ef14d889bcae7
+    m_Address: Female_Party_02_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f43e81a9e0467b4f93403b313b05cad
+    m_Address: Male_Adult_16_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afb89bbd7b9dad641a199277929dad4a
+    m_Address: Female_Party_01_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b08c4187664961f4ba89ad273260b99d
+    m_Address: Male_Adult_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b10a191572077e24d88ccbe134515095
+    m_Address: Female_Adult_10_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8bb886cf29421d4fb3ae6275d933345
+    m_Address: Female_Adult_04_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: baf9d2d3e444ede4eba9c7d4be7ba7be
+    m_Address: Male_Adult_18_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d778d5b46e672864d9a507fda87622c8
+    m_Address: Female_Adult_03_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: df7e14b29bff47146a383a4fcb743f48
+    m_Address: Female_Adult_15_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e591d52cd237c3843bcfd849a3cfede1
+    m_Address: Male_Adult_15_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ece3c89859282ea4ab5c51d6334e4065
+    m_Address: Male_Adult_14_facial
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - avatar
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: fcd74ef992b5f3746bfd39cb36af8790, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e907b6a3fcfec4740a3315609ee253d6, type: 2}
+    - {fileID: 11400000, guid: 3f15e24d628f0794991aedc8386f1d5b, type: 2}

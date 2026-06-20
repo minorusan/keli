@@ -1,0 +1,58 @@
+# ── Unity (standard) ───────────────────────────────────────────────────────
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
+[Rr]ecordings/
+
+# Asset meta files must be versioned WITH their asset — but never for ignored assets
+# (git can't re-include a .meta whose parent dir is ignored, which is exactly what we want
+# for the Models/ folder below).
+!/[Aa]ssets/**/*.meta
+
+# Visual Studio / Rider / generated project files
+.vs/
+.vsconfig
+.idea/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity build outputs / packages
+sysinfo.txt
+*.apk
+*.aab
+*.unitypackage
+*.app
+crashlytics-build.properties
+
+# ── Addressables build output (generated) ──────────────────────────────────
+/ServerData/
+/Assets/AddressableAssetsData/*/*.bin*
+
+# ── Project-specific: CODE ONLY — exclude the big model/asset import ───────
+# The ~20 GB Microsoft Rocketbox import. Shipped via Addressables, not source.
+/Assets/App/Content/Models/
+
+# Stray nested folder accidentally created by an early mis-pathed run.
+/maradel-face/
+
+# Local diagnostics that don't belong in the repo
+/log-extract.txt
+/log-paste.md
+/maradel-status.html
