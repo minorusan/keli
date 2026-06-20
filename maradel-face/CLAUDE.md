@@ -59,6 +59,12 @@ shows status + scale controls. THIS IS THE KNOWN-GOOD STATE.
 
 ## Change log
 
+- **Forward Unity console → Flutter (`Bridge/FlutterControlBridge.cs`).** `OnEnable` hooks
+  `Application.logMessageReceived` and re-emits each line as `Emit("log", {msg, level})` over the
+  existing bridge → the Flutter app logs it as `[unity] …` (build 44 added the receive side). A static
+  `_forwarding` reentrancy guard prevents any log→emit→log loop. Net: one shared keli log holds Flutter
+  + Unity together.
+
 - **Mute Maradel's voice in Unity (avoid double audio).** `RocketboxAutoRig` now sets the uLipSync
   component's `outputSoundGain = 0` (gated by a serialized `muteUnityVoice`, default true). uLipSync
   analyzes the signal BEFORE that output gain, so the mouth still lip-syncs while Unity emits no sound —

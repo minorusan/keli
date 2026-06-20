@@ -27,11 +27,13 @@ const List<ChangelogEntry> kChangelog = [
     build: 46,
     version: '1.0.46',
     date: '2026-06-20',
-    title: 'No double voice (Unity voice muted)',
+    title: 'No double voice + Unity logs in the shared log',
     body: '''
 - Maradel's reply now plays **once** — the **app** plays it; the **3D face's own voice is muted** so
   you don't hear it twice. The mouth still lip-syncs (the face still analyses the audio, it just
   doesn't output it). Global audio / future sound effects are unaffected.
+- The **3D face now forwards its console** to the app log — every Unity message shows as a `[unity]`
+  line, so a single shared log captures Flutter + Unity together (for chasing face/lipsync issues).
 ''',
   ),
   ChangelogEntry(

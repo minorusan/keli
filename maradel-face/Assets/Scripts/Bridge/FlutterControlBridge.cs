@@ -23,6 +23,9 @@ namespace Maradel.Bridge
         [System.Serializable]
         struct Msg { public string type; public float value; public int index; public string text; }
 
+        [System.Serializable] class LogLine { public string msg; public string level; }
+        static bool _forwarding; // reentrancy guard for the Unity-console → Flutter forwarder
+
         /// <summary>Ensure a "FlutterFace" GameObject with this bridge exists, so the embed package
         /// always has an OnMessage target (inert in the editor / when not embedded).</summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -35,6 +38,19 @@ namespace Maradel.Bridge
         }
 
         RocketboxAutoRig Rig => _rig != null ? _rig : (_rig = FindFirstObjectByType<RocketboxAutoRig>());
+
+        // ── forward the Unity console → Flutter (shows as [unity] lines in the shared keli log) ──
+        void OnEnable()  { Application.logMessageReceived += ForwardLog; }
+        void OnDisable() { Application.logMessageReceived -= ForwardLog; }
+
+        static void ForwardLog(string condition, string stackTrace, LogType type)
+        {
+            if (_forwarding) return;            // don't forward logs produced by the forwarding itself
+            _forwarding = true;
+            try { Emit("log", new LogLine { msg = condition, level = type.ToString() }); }
+            catch { /* never let logging throw */ }
+            finally { _forwarding = false; }
+        }
 
         // ── flutter_embed_unity calls this by name on the "FlutterFace" GameObject ──
         public void OnMessage(string raw)
