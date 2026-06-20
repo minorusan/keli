@@ -116,6 +116,11 @@ namespace Maradel.Speech
         [Tooltip("OPTIONAL override. Leave empty — the rig auto-finds a uLipSync Profile in the " +
                  "project/packages (uLipSync ships sample profiles).")]
         [SerializeField] uLipSync.Profile profile;
+
+        [Tooltip("Mute Maradel's voice IN UNITY (the Flutter voice_player plays it instead, so no double "
+                 + "audio). uLipSync still analyzes the signal, so the mouth keeps moving. Doesn't affect "
+                 + "global audio / future sound effects.")]
+        [SerializeField] bool muteUnityVoice = true;
 #endif
 
         SkinnedMeshRenderer _face;
@@ -173,6 +178,11 @@ namespace Maradel.Speech
 
 #if ULIPSYNC
             _ulip = Ensure<uLipSync.uLipSync>(gameObject);
+            // Mute Maradel's VOICE in Unity (the Flutter voice_player is the audible owner — avoids
+            // double audio). uLipSync still analyzes the full signal BEFORE this output gain, so the
+            // mouth keeps moving. This only silences THIS voice source; AudioListener / future sound
+            // effects are unaffected.
+            _ulip.outputSoundGain = muteUnityVoice ? 0f : 1f;
             if (profile == null) profile = AutoFindProfile();
             if (profile != null)
             {

@@ -59,6 +59,12 @@ shows status + scale controls. THIS IS THE KNOWN-GOOD STATE.
 
 ## Change log
 
+- **Mute Maradel's voice in Unity (avoid double audio).** `RocketboxAutoRig` now sets the uLipSync
+  component's `outputSoundGain = 0` (gated by a serialized `muteUnityVoice`, default true). uLipSync
+  analyzes the signal BEFORE that output gain, so the mouth still lip-syncs while Unity emits no sound —
+  the Flutter `voice_player` is the single audible owner of the reply. Only this voice AudioSource is
+  silenced; `AudioListener` / future sound effects are unaffected.
+
 - **Per-Keli config volume (`Common/KeliConfigVolume.cs`).** Reads `keli_config.json` from
   `Application.persistentDataPath` and applies `volume` to `AudioListener.volume`, re-reading on the
   file's write-time change. The Flutter app writes that file to the app's **external files dir**, which
