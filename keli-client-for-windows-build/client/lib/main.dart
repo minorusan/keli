@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'app_log.dart';
 import 'config.dart';
 import 'screens/home_screen.dart';
+import 'services/dynamic_views.dart';
 import 'services/keli_connection.dart';
 import 'services/keli_settings.dart';
 import 'services/maradel_session.dart';
@@ -43,6 +44,9 @@ class KeliApp extends StatelessWidget {
         // Flutter↔Unity bridge (skin list + set_skin + avatar index). init() restores the persisted
         // avatar and asks Unity for the skin list at startup.
         ChangeNotifierProvider(create: (_) => UnityBridge()..init()),
+        // Placement of the dynamic views (Maradel face / Tapo cam / Roomba map): pinned (centre) /
+        // floating / closed, persisted. Drives the home layout + the Widgets dashboard.
+        ChangeNotifierProvider(create: (_) => DynamicViewController()),
         // Persona sync: recolors KeliTheme + sets the avatar to Maradel's ACTIVE persona (boot +
         // persona:changed on :9100), and binds a user-picked skin back to the persona. lazy:false so
         // it connects/recolors at startup without waiting for a widget to read it.

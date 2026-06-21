@@ -10,6 +10,7 @@ import '../capabilities/registry.dart';
 import '../changelog.dart';
 import '../config.dart';
 import '../models/incoming_command.dart';
+import '../services/dynamic_views.dart';
 import '../services/keli_connection.dart';
 import '../services/keli_settings.dart';
 import '../services/mic_streamer.dart';
@@ -17,11 +18,12 @@ import '../services/unity_bridge.dart';
 import '../theme.dart';
 import '../widgets/registration_dialog.dart';
 import '../widgets/skin_picker.dart';
+import '../widgets/draggable_window.dart';
 import '../widgets/maradel_chat_window.dart';
 import '../widgets/mic_status_bar.dart';
 import '../widgets/perception_window.dart';
-import '../widgets/tapo_cam_window.dart';
 import '../widgets/update_button.dart';
+import '../widgets/widgets_dashboard.dart';
 import 'changelogs_page.dart';
 import 'face_screen.dart';
 
@@ -47,6 +49,68 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _faceKey,
         onMessageFromUnity: (message) => context.read<UnityBridge>().onUnityMessage(message),
       );
+
+  // ── dynamic-view content builders (shared between pinned + floating presentations) ──
+  Widget _camView() => RefreshingImage(
+        urlBuilder: (t) => '$kRobotCamUrl/cam.jpg?$t',
+        interval: const Duration(milliseconds: 350),
+        fit: BoxFit.cover,
+        offline: 'camera offline',
+      );
+
+  Widget _mapView() => RefreshingImage(
+        urlBuilder: (t) => '$kRobotMapUrl/minimap?t=$t',
+        interval: const Duration(seconds: 2),
+        fit: BoxFit.contain,
+        offline: 'no map signal',
+      );
+
+  Widget _viewContent(String id) => switch (id) {
+        ViewIds.tapoCam => _camView(),
+        ViewIds.tapoMap => _mapView(),
+        _ => _face, // unity
+      };
+
+  /// The centerpiece: the pinned view, rendered centered. The face keeps its full chrome (avatar
+  /// ◀/▶ + name + status); cam/map get a titled frame with quick float/close.
+  Widget _pinnedCenter(DynamicViewController views, KeliConnection conn) {
+    final id = views.pinnedId;
+    if (id == null) return const _EmptyCenter();
+    if (id == ViewIds.unity) return _FaceStage(conn: conn, face: _face);
+    return _PinnedView(
+      id: id,
+      onFloat: () => views.float(id),
+      onClose: () => views.close(id),
+      child: _viewContent(id),
+    );
+  }
+
+  /// Floating draggable windows for every view in [ViewMode.floating]. The Unity face only floats here
+  /// when [faceAt] says so (otherwise it's in the corner / off-screen and must not be double-mounted).
+  List<Widget> _floatingViews(DynamicViewController views, _FacePlace faceAt) {
+    final out = <Widget>[];
+    for (final id in views.floatingIds) {
+      if (id == ViewIds.unity && faceAt != _FacePlace.floating) continue;
+      final corner = id == ViewIds.tapoCam ? WindowCorner.topLeft : WindowCorner.topRight;
+      final (w, h) = switch (id) {
+        ViewIds.tapoCam => (280.0, 188.0),
+        ViewIds.unity => (240.0, 240.0),
+        _ => (260.0, 220.0),
+      };
+      out.add(DraggableWindow(
+        key: ValueKey('float-$id'),
+        title: ViewIds.title(id),
+        icon: ViewIds.icon(id),
+        corner: corner,
+        width: w,
+        height: h,
+        onPin: () => views.pin(id),
+        onClose: () => views.close(id),
+        child: _viewContent(id),
+      ));
+    }
+    return out;
+  }
 
   @override
   void initState() {
@@ -232,6 +296,16 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
     final overlayUp = conn.activeRequest != null || _selfAction != null;
+    final views = context.watch<DynamicViewController>();
+    // The single warm Unity face goes to exactly ONE place each build: parked off-screen when closed,
+    // the corner overlay during a tool popup, the centre when pinned, else its floating window.
+    final faceAt = views.isClosed(ViewIds.unity)
+        ? _FacePlace.offstage
+        : overlayUp
+            ? _FacePlace.corner
+            : views.isPinned(ViewIds.unity)
+                ? _FacePlace.center
+                : _FacePlace.floating;
     return Scaffold(
       backgroundColor: Colors.black, // black behind the embedded Unity face
       appBar: AppBar(
@@ -249,6 +323,12 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(_showChat ? Icons.chat_bubble : Icons.chat_bubble_outline,
                 color: _showChat ? KeliTheme.accent : KeliTheme.muted),
             onPressed: () => setState(() => _showChat = !_showChat),
+          ),
+          // Widgets dashboard — pin/float/close the dynamic views (face, cam, map).
+          IconButton(
+            tooltip: 'Widgets',
+            icon: Icon(Icons.dashboard_customize_outlined, color: KeliTheme.accent),
+            onPressed: () => showWidgetsDashboard(context),
           ),
           // Quick "ears" toggle — stream the mic to Maradel (the robot's ears).
           Consumer<MicStreamer>(
@@ -288,9 +368,8 @@ class _HomeScreenState extends State<HomeScreen> {
           // Solid black behind the Unity face — clean black frame around the square, seamless with
           // Unity's own black clear colour (the face floats on black).
           const Positioned.fill(child: ColoredBox(color: Colors.black)),
-          // Maradel's 3D face — full-screen square when no popup is up. When a tool popup covers the
-          // screen, it moves to the top-right corner overlay below (same single Unity view).
-          if (!overlayUp) _FaceStage(conn: conn, face: _face),
+          // CENTERPIECE: the pinned dynamic view (face / cam / map). Yields the centre to a tool popup.
+          if (!overlayUp) _pinnedCenter(views, conn),
           if (conn.commands.isNotEmpty)
             SafeArea(
               child: ListView(
@@ -307,8 +386,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-          // Live Tapo cam window — draggable (position not saved), top-left.
-          const TapoCamWindow(),
+          // FLOATING dynamic views (face / cam / map) as draggable windows — each with pin + close.
+          ..._floatingViews(views, faceAt),
           // What Maradel currently sees + where she thinks she is (perception loop), top-right.
           const PerceptionWindow(),
           // Read-only Maradel chat mirror — draggable floating window, top-right; toggled from the AppBar.
@@ -328,9 +407,9 @@ class _HomeScreenState extends State<HomeScreen> {
               command: _selfAction!,
               onComplete: _completeSelf,
             ),
-          // Tool popup up → keep the face visible as a small TOP-RIGHT overlay (Tapo cam is top-left).
+          // Tool popup up → keep the face visible as a small TOP-RIGHT overlay (unless it's closed).
           // Same single Unity view, reparented here via its GlobalKey (no reload).
-          if (overlayUp)
+          if (faceAt == _FacePlace.corner)
             Positioned(
               top: 0,
               right: 0,
@@ -347,8 +426,92 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+          // Face "closed" (parked in the dashboard) → keep Unity mounted off-screen so it stays warm
+          // (the Unity engine is a process-wide singleton; this just keeps the texture attached).
+          if (faceAt == _FacePlace.offstage) Offstage(child: _face),
           // Live "ears" status bar (voice meter + connection + chunks + expandable log).
           const Align(alignment: Alignment.bottomCenter, child: MicStatusBar()),
+        ],
+      ),
+    );
+  }
+}
+
+/// Where the single warm Unity face is mounted this frame (see [_HomeScreenState.build]).
+enum _FacePlace { center, floating, corner, offstage }
+
+/// Pinned centerpiece presentation for a non-face view (cam / map): a titled frame, centered like the
+/// face, with quick **float** / **close** actions in its little header.
+class _PinnedView extends StatelessWidget {
+  const _PinnedView({required this.id, required this.child, required this.onFloat, required this.onClose});
+  final String id;
+  final Widget child;
+  final VoidCallback onFloat;
+  final VoidCallback onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Center(
+        child: LayoutBuilder(
+          builder: (context, c) {
+            final side = (c.maxWidth < c.maxHeight ? c.maxWidth : c.maxHeight) * 0.9;
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: side,
+                  child: Row(
+                    children: [
+                      Icon(ViewIds.icon(id), size: 18, color: KeliTheme.accent),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(ViewIds.title(id),
+                            style: TextStyle(color: KeliTheme.text, fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 1)),
+                      ),
+                      IconButton(
+                        tooltip: 'Float',
+                        icon: Icon(Icons.picture_in_picture_alt, color: KeliTheme.accentDim, size: 20),
+                        onPressed: onFloat,
+                      ),
+                      IconButton(
+                        tooltip: 'Close',
+                        icon: Icon(Icons.close, color: KeliTheme.accentDim, size: 20),
+                        onPressed: onClose,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 6),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: SizedBox(width: side, height: side, child: child),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+/// Shown in the centre when nothing is pinned — points the user at the Widgets dashboard.
+class _EmptyCenter extends StatelessWidget {
+  const _EmptyCenter();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.dashboard_customize_outlined, size: 48, color: KeliTheme.muted),
+          const SizedBox(height: 12),
+          Text('Nothing pinned', style: TextStyle(color: KeliTheme.text, fontSize: 16, fontWeight: FontWeight.w700)),
+          const SizedBox(height: 4),
+          Text('Open Widgets (top bar) to pin a view here.',
+              style: TextStyle(color: KeliTheme.muted, fontSize: 12)),
         ],
       ),
     );

@@ -20,6 +20,8 @@ class DraggableWindow extends StatefulWidget {
     required this.child,
     this.width = 240,
     this.height = 200,
+    this.onPin,
+    this.onClose,
   });
 
   final String title;
@@ -28,6 +30,12 @@ class DraggableWindow extends StatefulWidget {
   final Widget child;
   final double width;
   final double height;
+
+  /// If set, a "pin" button in the header makes this view the centered centerpiece.
+  final VoidCallback? onPin;
+
+  /// If set, a "close" button parks this view (re-openable from the Widgets dashboard).
+  final VoidCallback? onClose;
 
   @override
   State<DraggableWindow> createState() => _DraggableWindowState();
@@ -93,14 +101,44 @@ class _DraggableWindowState extends State<DraggableWindow> {
         children: [
           Icon(widget.icon, size: 15, color: KeliTheme.accent),
           SizedBox(width: 6),
-          Text(widget.title,
-              style: TextStyle(color: KeliTheme.accentBright, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.5)),
-          Spacer(),
-          GestureDetector(
-            onTap: () => setState(() => _collapsed = !_collapsed),
-            child: Icon(_collapsed ? Icons.open_in_full : Icons.close_fullscreen, size: 15, color: KeliTheme.accentDim),
+          Flexible(
+            child: Text(widget.title,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: KeliTheme.accentBright, fontSize: 11, fontWeight: FontWeight.w700, letterSpacing: 1.5)),
           ),
+          const Spacer(),
+          if (widget.onPin != null)
+            _HeaderBtn(icon: Icons.push_pin_outlined, tip: 'Pin (center)', onTap: widget.onPin!),
+          _HeaderBtn(
+            icon: _collapsed ? Icons.open_in_full : Icons.close_fullscreen,
+            tip: _collapsed ? 'Expand' : 'Collapse',
+            onTap: () => setState(() => _collapsed = !_collapsed),
+          ),
+          if (widget.onClose != null)
+            _HeaderBtn(icon: Icons.close, tip: 'Close', onTap: widget.onClose!),
         ],
+      ),
+    );
+  }
+}
+
+class _HeaderBtn extends StatelessWidget {
+  const _HeaderBtn({required this.icon, required this.tip, required this.onTap});
+  final IconData icon;
+  final String tip;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tip,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Icon(icon, size: 15, color: KeliTheme.accentDim),
+        ),
       ),
     );
   }

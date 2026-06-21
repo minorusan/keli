@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 58,
+    version: '1.0.58',
+    date: '2026-06-21',
+    title: 'Pin / float / close your views — new Widgets dashboard',
+    body: '''
+- The face, the **Tapo cam**, and the **Roomba map** are now interchangeable **widgets**. **Pin** one
+  to make it the big centerpiece (only one at a time, and it's remembered), let the others **float** as
+  draggable windows, or **close** what you don't need.
+- New **Widgets** button in the top bar opens a dashboard to pin / float / close each view — and it's
+  where closed views live, ready to re-open. Floating windows also get quick pin + close buttons.
+- The 3D face stays warm even when it's not the centerpiece, so switching is instant.
+''',
+  ),
+  ChangelogEntry(
     build: 57,
     version: '1.0.57',
     date: '2026-06-21',
