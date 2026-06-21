@@ -6,6 +6,7 @@ import 'app_log.dart';
 import 'config.dart';
 import 'screens/home_screen.dart';
 import 'services/dynamic_views.dart';
+import 'services/gallery_store.dart';
 import 'services/keli_connection.dart';
 import 'services/keli_settings.dart';
 import 'services/maradel_session.dart';
@@ -35,6 +36,17 @@ class KeliApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => KeliConnection()),
+        // On-device gallery of the drawings `ascii_draw` shows (image + prompt). lazy:false so the
+        // connection has it attached before any show_image push arrives, not on first widget read.
+        ChangeNotifierProxyProvider<KeliConnection, GalleryStore>(
+          lazy: false,
+          create: (_) => GalleryStore(),
+          update: (_, conn, store) {
+            store ??= GalleryStore();
+            conn.gallery = store;
+            return store;
+          },
+        ),
         // Per-Keli identity/config (registration, 60s config poll, 10s log batching, master volume).
         // Proxied on KeliConnection so a `set_volume` command is applied immediately.
         ChangeNotifierProxyProvider<KeliConnection, KeliSettings>(

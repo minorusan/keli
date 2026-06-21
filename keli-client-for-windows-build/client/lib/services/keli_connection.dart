@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -9,6 +10,7 @@ import '../app_log.dart';
 import '../capabilities/registry.dart';
 import '../config.dart';
 import '../models/incoming_command.dart';
+import 'gallery_store.dart';
 
 /// The one Socket.IO connection to the Keli backend.
 ///
@@ -31,6 +33,7 @@ class KeliConnection extends ChangeNotifier {
   Map<String, dynamic>? get perception => _perception;
   final List<IncomingCommand> _commands = []; // push windows, newest first
   final List<IncomingCommand> _requests = []; // interactive requests, FIFO (active = first)
+  GalleryStore? gallery; // wired by main.dart — ascii_draw show_image pushes are saved here
 
   bool get connected => _connected;
   String get detail => _detail;
@@ -170,6 +173,18 @@ class KeliConnection extends ChangeNotifier {
     _commands.insert(0, cmd);
     _persist();
     notifyListeners();
+
+    // ascii_draw shows an image on the tablet: save it to the gallery (image + prompt) and auto-dismiss
+    // after durationMs (30s). Other show_image pushes are unaffected (no gallery flag / no durationMs).
+    if (event == 'show_image') {
+      if (cmd.data['gallery'] == true) {
+        final raw = '${cmd.data['data'] ?? ''}';
+        final b64 = raw.contains(',') ? raw.substring(raw.indexOf(',') + 1) : raw; // strip data: URI
+        gallery?.add(image: b64.trim(), prompt: '${cmd.data['caption'] ?? ''}'.trim(), ts: cmd.ts);
+      }
+      final dur = (cmd.data['durationMs'] as num?)?.toInt() ?? 0;
+      if (dur > 0) Timer(Duration(milliseconds: dur), () => dismiss(cmd.id));
+    }
   }
 
   // ── interactive requests ──

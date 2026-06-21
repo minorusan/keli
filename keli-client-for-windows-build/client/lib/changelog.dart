@@ -24,6 +24,22 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 66,
+    version: '1.0.66',
+    date: '2026-06-21',
+    title: 'Gallery — drawings Maradel shows here are saved',
+    body: '''
+Ask Maradel to **draw** something and it now appears on this tablet for **30 seconds**, then
+tidies itself away.
+
+- 🖼️ **Gallery** (in the side menu): every drawing Maradel shows here is kept — the picture **and**
+  the prompt it was drawn from, newest first.
+- Tap a tile to view it full-screen (pinch to zoom); long-press to delete one, or clear all from
+  the top-right.
+- Shown drawings **auto-dismiss after 30s** so the screen doesn't pile up.
+''',
+  ),
+  ChangelogEntry(
     build: 65,
     version: '1.0.65',
     date: '2026-06-21',
