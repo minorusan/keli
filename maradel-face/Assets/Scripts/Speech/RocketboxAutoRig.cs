@@ -249,30 +249,33 @@ namespace Maradel.Speech
             _small ??= new GUIStyle(GUI.skin.label) { richText = true, fontSize = 11, wordWrap = false };
             var prev = GuiOverlay.Begin(0.92f); // shared persistent scale
 
-            // collapsed → just a small "show" button
+            // INVISIBLE by default: the dev overlay is hidden entirely (Flutter owns the user-facing UI).
+            // A small, nearly-transparent hotspot in the very top-left corner summons it when needed.
             if (!_overlayOpen)
             {
-                GUILayout.BeginArea(new Rect(20, 20, 220, 46), GUI.skin.box);
-                if (GUILayout.Button("≡ Maradel", GUILayout.Height(36))) _overlayOpen = true;
+                var prevColor = GUI.color;
+                GUI.color = new Color(1f, 1f, 1f, 0.05f); // barely visible — effectively invisible
+                GUILayout.BeginArea(new Rect(0, 0, 72, 72));
+                if (GUILayout.Button("≡", GUILayout.Width(66), GUILayout.Height(66))) _overlayOpen = true;
                 GUILayout.EndArea();
+                GUI.color = prevColor;
                 GuiOverlay.End(prev);
                 return;
             }
 
             bool searching = !string.IsNullOrEmpty(_search);
             bool showList = searching || _listOpen;
-            float areaH = 426f
+            float areaH = 426f + 74f // +74 for the BIG bottom Close button
                         + (showList ? 240f : 0f)
                         + (_logOpen ? 200f : 0f)
                         + (_devOpen ? 330f : 0f)
                         + (_devOpen && _cacheOpen ? 250f : 0f);
             GUILayout.BeginArea(new Rect(20, 20, 780, areaH), GUI.skin.box);
 
-            // header: title + close
+            // header: title only (the close button is the BIG one pinned at the bottom)
             GUILayout.BeginHorizontal();
             GUILayout.Label("<b>Maradel · Models</b>", _rich);
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("✕", GUILayout.Width(40), GUILayout.Height(32))) _overlayOpen = false;
             GUILayout.EndHorizontal();
 
             // GUI scale — large + centered (sizes the whole overlay; easy to hit on the tablet)
@@ -366,6 +369,10 @@ namespace Maradel.Speech
                 for (int i = tail.Length - 1; i >= 0; i--) GUILayout.Label(tail[i], _small); // newest first
                 GUILayout.EndScrollView();
             }
+
+            // BIG Close button pinned to the BOTTOM of the overlay (easy to hit on the wall tablet).
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("✕   CLOSE", GUILayout.Height(60))) _overlayOpen = false;
 
             GUILayout.EndArea();
             GuiOverlay.End(prev);
