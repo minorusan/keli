@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 59,
+    version: '1.0.59',
+    date: '2026-06-21',
+    title: 'Pick your avatar — visual gallery',
+    body: '''
+- **Select skin** now opens a **visual avatar gallery** pulled from Maradel: every avatar with its
+  **body photo**, name and category. Tap one to wear it — it's applied to the 3D face instantly,
+  remembered across restarts, and bound to the active persona.
+- **Search** by name / category / look, and **zoom** the thumbnails in/out (− / +).
+- If Maradel's gallery isn't reachable, it falls back to the plain skin list the face reports — so
+  picking still works offline.
+''',
+  ),
+  ChangelogEntry(
     build: 58,
     version: '1.0.58',
     date: '2026-06-21',
