@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -36,6 +37,43 @@ class UnityBridge extends ChangeNotifier {
   bool get awaiting => _awaiting;
   int get index => _idx;
   int get total => _skins.length;
+
+  // A skin swap is in flight: set when we ask Unity to load a skin, cleared when Unity echoes the live
+  // `avatar` (load+wire done) or after a safety timeout. Drives the face's loading overlay so the
+  // ◀/▶ + picker don't feel dead during the (sometimes multi-second) remote download + instantiate.
+  bool _loading = false;
+  Timer? _loadTimeout;
+  bool get loading => _loading;
+
+  void _beginLoading() {
+    _loadTimeout?.cancel();
+    // Generous cap — a cold (uncached) Rocketbox avatar can take several seconds to download + wire.
+    _loadTimeout = Timer(const Duration(seconds: 25), () {
+      if (_loading) {
+        _loading = false;
+        notifyListeners();
+      }
+    });
+    if (!_loading) {
+      _loading = true;
+      notifyListeners();
+    }
+  }
+
+  void _endLoading() {
+    _loadTimeout?.cancel();
+    _loadTimeout = null;
+    if (_loading) {
+      _loading = false;
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _loadTimeout?.cancel();
+    super.dispose();
+  }
 
   /// The avatar currently shown (the skin at [index]) — drives the ◀/▶ name + category label.
   SkinItem? get currentSkin => (_idx >= 0 && _idx < _skins.length) ? _skins[_idx] : null;
@@ -91,10 +129,9 @@ class UnityBridge extends ChangeNotifier {
         if (d is Map) {
           _unityReal = '${d['file'] ?? d['name'] ?? ''}';
           final i = _skins.indexWhere((s) => s.real == _unityReal);
-          if (i >= 0) {
-            _idx = i;
-            notifyListeners();
-          }
+          if (i >= 0) _idx = i;
+          _endLoading(); // the live avatar changed → the swap finished; drop the loading overlay
+          notifyListeners();
         }
         return;
       }
@@ -180,6 +217,7 @@ class UnityBridge extends ChangeNotifier {
     final i = _skins.indexWhere((s) => s.real == real);
     if (i >= 0) _idx = i;
     _persist(real);
+    _beginLoading(); // show the face loading overlay until Unity echoes the live `avatar`
     notifyListeners();
   }
 

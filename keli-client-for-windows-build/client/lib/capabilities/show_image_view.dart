@@ -36,27 +36,28 @@ class ShowImageView extends StatelessWidget {
       icon: Icons.image_outlined,
       onClose: onClose,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (bytes != null)
-            GestureDetector(
-              onTap: () => _openFullscreen(context, bytes),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                // Inline pinch-zoom; tap opens the full-screen zoomable viewer.
-                child: InteractiveViewer(
-                  minScale: 1,
-                  maxScale: 5,
-                  child: Image.memory(bytes, fit: BoxFit.contain),
-                ),
-              ),
-            )
-          else
-            Text('invalid image data', style: TextStyle(color: KeliTheme.danger)),
+          // The image fills the full-screen body; pinch to zoom inline, tap to open the immersive viewer.
+          Expanded(
+            child: bytes != null
+                ? GestureDetector(
+                    onTap: () => _openFullscreen(context, bytes),
+                    child: InteractiveViewer(
+                      minScale: 1,
+                      maxScale: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Center(child: Image.memory(bytes, fit: BoxFit.contain)),
+                      ),
+                    ),
+                  )
+                : Center(child: Text('invalid image data', style: TextStyle(color: KeliTheme.danger))),
+          ),
           if (caption.isNotEmpty)
             Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text(caption, style: TextStyle(color: KeliTheme.muted, fontSize: 12.5)),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+              child: Text(caption, textAlign: TextAlign.center, style: TextStyle(color: KeliTheme.muted, fontSize: 13.5)),
             ),
         ],
       ),

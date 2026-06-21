@@ -21,21 +21,32 @@ class ShowTextView extends StatelessWidget {
       title: title.isNotEmpty ? title : 'Message',
       icon: Icons.notifications_active_outlined,
       onClose: onClose,
-      child: MarkdownBody(
-        data: command.str('text'),
-        selectable: true,
-        styleSheet: MarkdownStyleSheet(
-          p: TextStyle(color: KeliTheme.text, fontSize: 14, height: 1.5),
-          h1: TextStyle(color: KeliTheme.text, fontSize: 20, fontWeight: FontWeight.bold),
-          h2: TextStyle(color: KeliTheme.text, fontSize: 17, fontWeight: FontWeight.bold),
-          code: TextStyle(color: KeliTheme.accent, backgroundColor: KeliTheme.bg, fontFamily: 'monospace'),
-          codeblockDecoration: BoxDecoration(color: KeliTheme.bg, borderRadius: BorderRadius.circular(8)),
-          blockquoteDecoration: BoxDecoration(border: Border(left: BorderSide(color: KeliTheme.accentDim, width: 3))),
-          a: TextStyle(color: KeliTheme.accent, decoration: TextDecoration.underline),
+      // Fills the full-screen body; scrolls when the message is long. Centred + width-capped so long
+      // prose stays readable on a wide landscape wall tablet.
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 32),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 760),
+            child: MarkdownBody(
+              data: command.str('text'),
+              selectable: true,
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: KeliTheme.text, fontSize: 16, height: 1.55),
+                h1: TextStyle(color: KeliTheme.text, fontSize: 24, fontWeight: FontWeight.bold),
+                h2: TextStyle(color: KeliTheme.text, fontSize: 20, fontWeight: FontWeight.bold),
+                code: TextStyle(color: KeliTheme.accent, backgroundColor: KeliTheme.bg, fontFamily: 'monospace'),
+                codeblockDecoration: BoxDecoration(color: KeliTheme.bg, borderRadius: BorderRadius.circular(8)),
+                blockquoteDecoration: BoxDecoration(border: Border(left: BorderSide(color: KeliTheme.accentDim, width: 3))),
+                a: TextStyle(color: KeliTheme.accent, decoration: TextDecoration.underline),
+              ),
+              onTapLink: (text, href, title) {
+                if (href != null) launchUrl(Uri.parse(href), mode: LaunchMode.externalApplication);
+              },
+            ),
+          ),
         ),
-        onTapLink: (text, href, title) {
-          if (href != null) launchUrl(Uri.parse(href), mode: LaunchMode.externalApplication);
-        },
       ),
     );
   }

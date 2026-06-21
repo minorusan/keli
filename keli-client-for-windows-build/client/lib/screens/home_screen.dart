@@ -353,7 +353,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       endDrawer: _SidePanel(),
-      floatingActionButton: overlayUp
+      floatingActionButton: (overlayUp || conn.commands.isNotEmpty)
           ? null
           : Container(
               decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: KeliTheme.glow(blur: 12, alpha: 0.5)),
@@ -371,22 +371,6 @@ class _HomeScreenState extends State<HomeScreen> {
           const Positioned.fill(child: ColoredBox(color: Colors.black)),
           // CENTERPIECE: the pinned dynamic view (face / cam / map). Yields the centre to a tool popup.
           if (!overlayUp) _pinnedCenter(views, conn),
-          if (conn.commands.isNotEmpty)
-            SafeArea(
-              child: ListView(
-                padding: EdgeInsets.fromLTRB(14, 14, 14, 28),
-                children: [
-                  // Cap width + center so popups don't span a wide landscape screen.
-                  for (final cmd in conn.commands)
-                    Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 600),
-                        child: buildCommandView(context, cmd, () => conn.dismiss(cmd.id)),
-                      ),
-                    ),
-                ],
-              ),
-            ),
           // FLOATING dynamic views (face / cam / map) as draggable windows — each with pin + close.
           ..._floatingViews(views, faceAt),
           // What Maradel currently sees + where she thinks she is (perception loop), top-right.
@@ -395,6 +379,17 @@ class _HomeScreenState extends State<HomeScreen> {
           const _AttentionIndicator(),
           // Read-only Maradel chat mirror — draggable floating window, top-right; toggled from the AppBar.
           if (_showChat && !overlayUp) const MaradelChatWindow(),
+          // SHOWN windows (push: show_text / show_image / show_diary) — FULL-SCREEN and ON TOP of all the
+          // ambient windows (face / floating cam-map / perception / chat). Newest on top; closing it
+          // (its ✕, or the AppBar "Close all") reveals the next.
+          if (conn.commands.isNotEmpty)
+            Positioned.fill(
+              child: buildCommandView(
+                context,
+                conn.commands.last,
+                () => conn.dismiss(conn.commands.last.id),
+              ),
+            ),
           // Interactive request from Maradel — one at a time over a scrim.
           if (conn.activeRequest != null)
             _RequestOverlay(
@@ -589,6 +584,29 @@ class _FaceStage extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: SizedBox(width: side, height: side, child: face),
+                      ),
+                      // Loading overlay while a skin swap is in flight (cleared when Unity echoes the
+                      // live avatar) — so ◀/▶ + the picker give immediate feedback instead of feeling dead.
+                      Consumer<UnityBridge>(
+                        builder: (_, b, _) => b.loading
+                            ? Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: ColoredBox(
+                                    color: Colors.black.withValues(alpha: 0.45),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        CircularProgressIndicator(color: KeliTheme.accent),
+                                        const SizedBox(height: 12),
+                                        Text('Loading avatar…',
+                                            style: TextStyle(color: KeliTheme.text, fontSize: 13, fontWeight: FontWeight.w600)),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
                       ),
                       Positioned(left: 6, child: _AvatarNavButton(icon: Icons.chevron_left, onTap: () => context.read<UnityBridge>().prevSkin())),
                       Positioned(right: 6, child: _AvatarNavButton(icon: Icons.chevron_right, onTap: () => context.read<UnityBridge>().nextSkin())),
@@ -904,9 +922,9 @@ class _SidePanel extends StatelessWidget {
   }
 }
 
-/// Top-centre pill that shows Maradel's ears state: a pulsing mic while she's HEARING you (wake / speech
-/// onset) and a spinner while she's THINKING (generating the reply). Driven by `voice:attention`
-/// (VoicePlayer). Hidden when idle.
+/// Bottom-centre pill that shows Maradel's ears state: a pulsing mic while she's HEARING you (wake /
+/// speech onset) and a spinner while she's THINKING (generating the reply). Driven by `voice:attention`
+/// (VoicePlayer). Hidden when idle. Sits just above the bottom MicStatusBar.
 class _AttentionIndicator extends StatefulWidget {
   const _AttentionIndicator();
 
@@ -930,13 +948,13 @@ class _AttentionIndicatorState extends State<_AttentionIndicator> with SingleTic
     final hearing = vp.hearing, thinking = vp.thinking;
     if (!hearing && !thinking) return const SizedBox.shrink();
     return Positioned(
-      top: 0,
+      bottom: 0,
       left: 0,
       right: 0,
       child: SafeArea(
         child: Center(
           child: Container(
-            margin: const EdgeInsets.only(top: 8),
+            margin: const EdgeInsets.only(bottom: 48), // clear the 40px MicStatusBar at the very bottom
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             decoration: BoxDecoration(
               color: KeliTheme.surface.withValues(alpha: 0.9),
@@ -957,7 +975,7 @@ class _AttentionIndicatorState extends State<_AttentionIndicator> with SingleTic
                 const SizedBox(width: 9),
                 Text(
                   thinking ? 'Thinking…' : 'Listening…',
-                  style: const TextStyle(color: KeliTheme.accentBright, fontSize: 13, fontWeight: FontWeight.w700, letterSpacing: 0.5),
+                  style: TextStyle(color: KeliTheme.accentBright, fontSize: 13, fontWeight: FontWeight.w700, letterSpacing: 0.5),
                 ),
               ],
             ),

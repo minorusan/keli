@@ -16,6 +16,11 @@ namespace Maradel.Face
         static readonly Dictionary<string, (string shape, float w)[]> Poses = new()
         {
             { "neutral", System.Array.Empty<(string, float)>() },
+            // Conversational "ears" states (driven by voice:attention → setMood): listening = attentive,
+            // brows up + a small smile + eyes a touch wide; thinking = pondering, inner brow up + one brow
+            // down + mouth pucker + slight squint. These make the VAD/generating signal VISIBLE on the face.
+            { "listening",    new[] { ("AK_03_BrowInnerUp",.2f), ("AK_04_BrowOuterUpLeft",.25f), ("AK_05_BrowOuterUpRight",.25f), ("AK_21_EyeWideLeft",.12f), ("AK_22_EyeWideRight",.12f), ("AK_44_MouthSmileLeft",.15f), ("AK_45_MouthSmileRight",.15f) } },
+            { "thinking",     new[] { ("AK_03_BrowInnerUp",.3f), ("AK_01_BrowDownLeft",.2f), ("AK_38_MouthPucker",.2f), ("AK_19_EyeSquintLeft",.15f), ("AK_20_EyeSquintRight",.15f) } },
             { "happy",        new[] { ("AK_44_MouthSmileLeft",.6f), ("AK_45_MouthSmileRight",.6f), ("AK_07_CheekSquintLeft",.25f), ("AK_08_CheekSquintRight",.25f) } },
             { "joyful",       new[] { ("AK_44_MouthSmileLeft",.85f), ("AK_45_MouthSmileRight",.85f), ("AK_07_CheekSquintLeft",.4f), ("AK_08_CheekSquintRight",.4f), ("AK_21_EyeWideLeft",.15f), ("AK_22_EyeWideRight",.15f) } },
             { "excited",      new[] { ("AK_44_MouthSmileLeft",.7f), ("AK_45_MouthSmileRight",.7f), ("AK_21_EyeWideLeft",.35f), ("AK_22_EyeWideRight",.35f), ("AK_03_BrowInnerUp",.3f) } },

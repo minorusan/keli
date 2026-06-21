@@ -59,6 +59,19 @@ shows status + scale controls. THIS IS THE KNOWN-GOOD STATE.
 
 ## Change log
 
+- **Fix: dev-overlay buttons go dead — `OnGUI` Layout/Repaint control-count mismatch.** Device logs
+  showed `ArgumentException: Getting control N's position in a group with only N controls when doing
+  repaint` from `RocketboxAutoRig.OnGUI` (recurred while streaming, right after a **Send Logs** upload).
+  Cause: a few flags that gate conditional `GUILayout` controls are mutated OFF the GUI event cycle —
+  `_dumpStatus` (async log-upload continuation), `DownloadProgress.Active` (download coroutines), and
+  `_avatarPaths.Count` (avatar discovery). When one flips between the Layout and Repaint passes of a
+  single frame, the emitted control count changes by one, IMGUI throws, and the overlay aborts mid-draw
+  so **its buttons stop responding (appear noop)**. Fix: snapshot those flags once per frame on the
+  `EventType.Layout` event into `_gTotal/_gHasCopyMsg/_gDownloading/_gHasDumpStatus` and use the snapshot
+  for the rest of the frame, so Layout and Repaint always emit the same controls. (GUI-toggled flags —
+  `_listOpen/_devOpen/_logOpen/_cacheOpen/_overlayOpen` — only change on a Used event, already
+  frame-stable, so they're left as-is.) Needs a Unity re-export + APK rebuild to reach the device.
+
 - **Emotion → facial expression (`setMood`).** Completed the chain: backend broadcasts `voice:emotion`
   (`speech/index.ts`); the app's `VoicePlayer` forwards it to the live bridge as `{type:setMood, text:<mood>}`
   (the main screen has no `UnityFaceBridge`, so it sends straight to `FlutterFace.OnMessage`);

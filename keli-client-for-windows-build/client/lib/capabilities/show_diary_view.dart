@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import '../theme.dart';
 import '../widgets/command_card.dart';
 
 class ShowDiaryView extends StatelessWidget {
@@ -25,30 +26,21 @@ class ShowDiaryView extends StatelessWidget {
       child: DefaultTabController(
         length: 2,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            const TabBar(
-              labelColor: Colors.blue,
-              unselectedLabelColor: Colors.grey,
-              tabs: [
+            TabBar(
+              labelColor: KeliTheme.accent,
+              unselectedLabelColor: KeliTheme.muted,
+              indicatorColor: KeliTheme.accent,
+              tabs: const [
                 Tab(text: 'Diary'),
                 Tab(text: 'Claude'),
               ],
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
+            Expanded(
               child: TabBarView(
                 children: [
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: MarkdownBody(data: content),
-                  ),
-                  SingleChildScrollView(
-                    padding: const EdgeInsets.all(16),
-                    child: MarkdownBody(
-                      data: claudeActivity ?? 'No recent activity.',
-                    ),
-                  ),
+                  _page(content),
+                  _page(claudeActivity ?? 'No recent activity.'),
                 ],
               ),
             ),
@@ -57,4 +49,24 @@ class ShowDiaryView extends StatelessWidget {
       ),
     );
   }
+
+  Widget _page(String md) => Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 760),
+            child: MarkdownBody(
+              data: md,
+              styleSheet: MarkdownStyleSheet(
+                p: TextStyle(color: KeliTheme.text, fontSize: 15, height: 1.5),
+                h1: TextStyle(color: KeliTheme.text, fontSize: 22, fontWeight: FontWeight.bold),
+                h2: TextStyle(color: KeliTheme.text, fontSize: 18, fontWeight: FontWeight.bold),
+                a: TextStyle(color: KeliTheme.accent),
+                code: TextStyle(color: KeliTheme.accent, backgroundColor: KeliTheme.bg, fontFamily: 'monospace'),
+              ),
+            ),
+          ),
+        ),
+      );
 }

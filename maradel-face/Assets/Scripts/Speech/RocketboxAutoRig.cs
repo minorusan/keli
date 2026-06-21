@@ -88,6 +88,19 @@ namespace Maradel.Speech
         bool _logOpen;              // bottom log window open
         bool _devOpen;             // "Dev" tools section (testers/calib/cache) open
         Vector2 _logScroll;
+
+        // ── OnGUI Layout/Repaint parity snapshot ──
+        // IMGUI requires the SAME set of controls in a frame's Layout and Repaint passes. A few flags
+        // that gate conditional controls below are mutated OFF the GUI event cycle — the async log-upload
+        // continuation (_dumpStatus), download coroutines (DownloadProgress.Active), and avatar discovery
+        // (_avatarPaths.Count). If one flips between Layout and Repaint, the control count changes by one
+        // and Unity throws "Getting control N's position in a group with only N controls when doing repaint"
+        // (seen in the device logs), aborting the overlay mid-draw so its buttons stop responding. We
+        // snapshot them once on the Layout event and reuse the snapshot for the rest of the frame.
+        int _gTotal;          // _avatarPaths.Count
+        bool _gHasCopyMsg;    // _copyMsg non-empty
+        bool _gDownloading;   // DownloadProgress.Active
+        bool _gHasDumpStatus; // _dumpStatus non-empty
         GUIStyle _small;
         Transform _lightsRoot;      // 3-point portrait lighting (created once)
         Light _keyLight, _fillLight, _rimLight;
@@ -263,6 +276,17 @@ namespace Maradel.Speech
                 return;
             }
 
+            // Snapshot the off-GUI-cycle flags ONCE per frame (on Layout) so Repaint emits the same
+            // controls — see the _g* fields. Everything else gating a control below is GUI-toggled
+            // (only changes on a Used event → already frame-stable).
+            if (Event.current.type == EventType.Layout)
+            {
+                _gTotal = _avatarPaths != null ? _avatarPaths.Count : 0;
+                _gHasCopyMsg = !string.IsNullOrEmpty(_copyMsg);
+                _gDownloading = DownloadProgress.Active;
+                _gHasDumpStatus = !string.IsNullOrEmpty(_dumpStatus);
+            }
+
             bool searching = !string.IsNullOrEmpty(_search);
             bool showList = searching || _listOpen;
             float areaH = 426f + 74f // +74 for the BIG bottom Close button
@@ -282,7 +306,7 @@ namespace Maradel.Speech
             GuiOverlay.ScaleControls(_rich, centered: true);
 
             // current model + left/right
-            int total = _avatarPaths != null ? _avatarPaths.Count : 0;
+            int total = _gTotal; // frame-snapshot (avatar discovery can mutate the list off-frame)
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("◀", GUILayout.Width(50), GUILayout.Height(40))) PrevAvatar();
             string avName = (total > 0 && _avatar != null)
@@ -300,7 +324,7 @@ namespace Maradel.Speech
             if (GUILayout.Button("✕", GUILayout.Width(30), GUILayout.Height(28))) { _search = ""; GUI.FocusControl(null); }
             if (GUILayout.Button(_listOpen ? "Hide ▲" : "Browse ▼", GUILayout.Width(110), GUILayout.Height(28))) _listOpen = !_listOpen;
             GUILayout.EndHorizontal();
-            if (!string.IsNullOrEmpty(_copyMsg)) GUILayout.Label($"<color=#7CFC00>{_copyMsg}</color>", _small);
+            if (_gHasCopyMsg) GUILayout.Label($"<color=#7CFC00>{_copyMsg}</color>", _small);
 
             // suggestions (when typing) OR full category list (Browse) — each row: load + copy-name
             if (showList && total > 0)
@@ -340,7 +364,7 @@ namespace Maradel.Speech
             GUILayout.EndHorizontal();
 
             // download status
-            if (DownloadProgress.Active)
+            if (_gDownloading)
                 GuiOverlay.ProgressBar($"{DownloadProgress.Label}  {DownloadProgress.SizeText}", DownloadProgress.Value01);
 
             // compact status line
@@ -357,7 +381,7 @@ namespace Maradel.Speech
             if (GUILayout.Button(_logOpen ? "Log ▲" : "Log ▼", GUILayout.Width(90), GUILayout.Height(30))) _logOpen = !_logOpen;
             if (GUILayout.Button(_devOpen ? "Dev ▲" : "Dev ▼", GUILayout.Width(90), GUILayout.Height(30))) _devOpen = !_devOpen;
             GUILayout.EndHorizontal();
-            if (!string.IsNullOrEmpty(_dumpStatus)) GUILayout.Label($"<size=11><color=#9cf>{_dumpStatus}</color></size>", _rich);
+            if (_gHasDumpStatus) GUILayout.Label($"<size=11><color=#9cf>{_dumpStatus}</color></size>", _rich);
 
             if (_devOpen) DrawDevTools();
 

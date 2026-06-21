@@ -24,6 +24,53 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 65,
+    version: '1.0.65',
+    date: '2026-06-21',
+    title: 'Shown windows go full-screen, on top',
+    body: '''
+- **Anything Maradel shows you** (text messages, images, the diary) now opens as a **clean full-screen
+  window on top of everything** — no longer a small card tucked behind the face / cam / map windows.
+- Bigger title bar + close, text is **larger and width-capped** for readability, images **fill the
+  screen** (pinch to zoom, tap for the immersive viewer), and the diary's tabs fill the page.
+- When several are shown at once, the newest is on top — close it to reveal the next (or "Close all"
+  from the top bar).''',
+  ),
+  ChangelogEntry(
+    build: 64,
+    version: '1.0.64',
+    date: '2026-06-21',
+    title: 'Model picker — filter chips + search',
+    body: '''
+- **Reworked the avatar/model picker** for the 115-model library: a row of **category chips**
+  (Adults · Children · Professions, with counts) plus a **Women / Men** toggle, on top of the existing
+  text search — so you can narrow to what you want in a tap or two.
+- A live **result count** in the title, the **current model is checkmarked**, empty results get a
+  one-tap **Clear filters**, and the offline fallback list now marks the active model too.''',
+  ),
+  ChangelogEntry(
+    build: 63,
+    version: '1.0.63',
+    date: '2026-06-21',
+    title: 'Listening / thinking pill moved to the bottom',
+    body: '''
+- The **Listening… / Thinking…** indicator now appears at the **bottom-centre** of the screen (just above
+  the ears status bar) instead of the top — out of the way of the face and the top widgets.''',
+  ),
+  ChangelogEntry(
+    build: 62,
+    version: '1.0.62',
+    date: '2026-06-21',
+    title: 'Avatar swap feedback + the face really reacts',
+    body: '''
+- **Switching avatar now shows a loading spinner** on the face — the ◀/▶ arrows and the picker used to
+  feel dead while a new model downloaded + loaded (several seconds for an uncached one); now you get
+  immediate feedback until the new face is ready.
+- **The 3D face actually reacts to listening / thinking now.** The moods were being sent but the face
+  had no pose for them (so it stayed neutral); it now shows an attentive *listening* look and a pensive
+  *thinking* look. (Needs the matching Unity face rebuild to be visible on the device.)''',
+  ),
+  ChangelogEntry(
     build: 61,
     version: '1.0.61',
     date: '2026-06-21',

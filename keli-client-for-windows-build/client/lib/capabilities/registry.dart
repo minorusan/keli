@@ -40,7 +40,10 @@ Widget buildCommandView(BuildContext context, IncomingCommand command, VoidCallb
     title: command.event,
     icon: Icons.help_outline,
     onClose: onClose,
-    child: Text('${command.data}', style: const TextStyle(fontSize: 12)),
+    child: SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: SelectableText('${command.data}', style: const TextStyle(fontSize: 13)),
+    ),
   );
 }
 
