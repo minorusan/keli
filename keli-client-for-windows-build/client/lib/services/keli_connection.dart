@@ -31,6 +31,9 @@ class KeliConnection extends ChangeNotifier {
   double? get pendingVolume => _pendingVolume;
   Map<String, dynamic>? _perception; // latest perception snapshot {at,tapo,usb,location,present}
   Map<String, dynamic>? get perception => _perception;
+  List<Map<String, dynamic>> _reminders = []; // Maradel's reminder list (live via socket + 30s poll)
+  List<Map<String, dynamic>> get reminders => List.unmodifiable(_reminders);
+  Timer? _remindersPoll;
   final List<IncomingCommand> _commands = []; // push windows, newest first
   final List<IncomingCommand> _requests = []; // interactive requests, FIFO (active = first)
   GalleryStore? gallery; // wired by main.dart — ascii_draw show_image pushes are saved here
@@ -162,7 +165,14 @@ class KeliConnection extends ChangeNotifier {
       }
     });
 
+    // Reminder list (Maradel → Keli). Live updates here + a 30s poll of GET /reminders as a backstop.
+    _socket.on('reminders', (data) {
+      if (data is Map && data['reminders'] is List) _applyReminders(data['reminders'] as List);
+    });
+
     _socket.connect();
+    _remindersPoll ??= Timer.periodic(const Duration(seconds: 30), (_) => _pollReminders());
+    _pollReminders();
   }
 
   // ── push windows ──
@@ -246,8 +256,25 @@ class KeliConnection extends ChangeNotifier {
     notifyListeners();
   }
 
+  // ── reminders ──
+  void _applyReminders(List raw) {
+    _reminders = raw.whereType<Map>().map((m) => Map<String, dynamic>.from(m)).toList()
+      ..sort((a, b) => ((a['fireAt'] as num?) ?? 0).compareTo((b['fireAt'] as num?) ?? 0));
+    notifyListeners();
+  }
+
+  Future<void> _pollReminders() async {
+    try {
+      final r = await http.get(Uri.parse('$url/reminders')).timeout(const Duration(seconds: 8));
+      if (r.statusCode != 200) return;
+      final body = jsonDecode(r.body);
+      if (body is Map && body['reminders'] is List) _applyReminders(body['reminders'] as List);
+    } catch (_) {/* backend unreachable — the socket event + next poll will catch up */}
+  }
+
   @override
   void dispose() {
+    _remindersPoll?.cancel();
     _socket.dispose();
     super.dispose();
   }

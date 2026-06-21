@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 67,
+    version: '1.0.67',
+    date: '2026-06-21',
+    title: 'Reminders — Maradel says them out loud here',
+    body: '''
+Ask Maradel to **remind you** of something ("remind me to call mum at 6pm") and when the time comes
+she **says it out loud right here**, sends a notification, and pops it up **full-screen** on this tablet.
+
+- ⏰ **Reminders** (in the side menu): the list Maradel is tracking, soonest first, with a live
+  countdown. Fired ones are dimmed.
+- The list stays in sync automatically (and refreshes every 30s as a backstop).
+''',
+  ),
+  ChangelogEntry(
     build: 66,
     version: '1.0.66',
     date: '2026-06-21',

@@ -27,6 +27,7 @@ import '../widgets/update_button.dart';
 import '../widgets/widgets_dashboard.dart';
 import 'changelogs_page.dart';
 import 'gallery_page.dart';
+import 'reminders_page.dart';
 import 'face_screen.dart';
 
 /// The single screen: connection status in the background, with any open
@@ -889,6 +890,17 @@ class _SidePanel extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 showRegistrationDialog(context, dismissible: true);
+              },
+            ),
+            Divider(color: KeliTheme.surface2),
+            ListTile(
+              leading: Icon(Icons.alarm, color: KeliTheme.accent),
+              title: Text('Reminders', style: TextStyle(color: KeliTheme.text, fontSize: 14)),
+              subtitle: Text('what Maradel will remind you of', style: TextStyle(color: KeliTheme.muted, fontSize: 11)),
+              trailing: Icon(Icons.chevron_right, color: KeliTheme.muted),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => RemindersPage()));
               },
             ),
             Divider(color: KeliTheme.surface2),
