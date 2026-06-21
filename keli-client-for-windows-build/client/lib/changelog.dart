@@ -24,6 +24,19 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 60,
+    version: '1.0.60',
+    date: '2026-06-21',
+    title: 'Cleaner 3D face — dev overlay gone, big Close',
+    body: '''
+- The in-engine **dev overlay is now fully hidden** by default (no stray "≡" box on the face) — a tiny
+  invisible corner hotspot still summons it for debugging.
+- When the dev overlay is open, the small top ✕ is replaced by a **big Close button at the bottom**,
+  easy to hit on the wall tablet.
+- (This is the first full rebuild carrying those Unity-side changes to the device.)
+''',
+  ),
+  ChangelogEntry(
     build: 59,
     version: '1.0.59',
     date: '2026-06-21',
