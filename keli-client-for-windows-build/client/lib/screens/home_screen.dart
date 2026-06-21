@@ -11,6 +11,7 @@ import '../changelog.dart';
 import '../config.dart';
 import '../models/incoming_command.dart';
 import '../services/dynamic_views.dart';
+import '../services/voice_player.dart';
 import '../services/keli_connection.dart';
 import '../services/keli_settings.dart';
 import '../services/mic_streamer.dart';
@@ -390,6 +391,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ..._floatingViews(views, faceAt),
           // What Maradel currently sees + where she thinks she is (perception loop), top-right.
           const PerceptionWindow(),
+          // Listening / thinking indicator (top-centre) — driven by Maradel's ears state (voice:attention).
+          const _AttentionIndicator(),
           // Read-only Maradel chat mirror — draggable floating window, top-right; toggled from the AppBar.
           if (_showChat && !overlayUp) const MaradelChatWindow(),
           // Interactive request from Maradel — one at a time over a scrim.
@@ -893,6 +896,70 @@ class _SidePanel extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Top-centre pill that shows Maradel's ears state: a pulsing mic while she's HEARING you (wake / speech
+/// onset) and a spinner while she's THINKING (generating the reply). Driven by `voice:attention`
+/// (VoicePlayer). Hidden when idle.
+class _AttentionIndicator extends StatefulWidget {
+  const _AttentionIndicator();
+
+  @override
+  State<_AttentionIndicator> createState() => _AttentionIndicatorState();
+}
+
+class _AttentionIndicatorState extends State<_AttentionIndicator> with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 900))..repeat(reverse: true);
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final vp = context.watch<VoicePlayer>();
+    final hearing = vp.hearing, thinking = vp.thinking;
+    if (!hearing && !thinking) return const SizedBox.shrink();
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      child: SafeArea(
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+            decoration: BoxDecoration(
+              color: KeliTheme.surface.withValues(alpha: 0.9),
+              borderRadius: BorderRadius.circular(22),
+              border: Border.all(color: KeliTheme.accent.withValues(alpha: 0.6)),
+              boxShadow: KeliTheme.glow(blur: 14, alpha: 0.35),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (thinking)
+                  SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: KeliTheme.accent))
+                else
+                  FadeTransition(
+                    opacity: Tween(begin: 0.35, end: 1.0).animate(_pulse),
+                    child: Icon(Icons.mic, size: 18, color: KeliTheme.accent),
+                  ),
+                const SizedBox(width: 9),
+                Text(
+                  thinking ? 'Thinking…' : 'Listening…',
+                  style: const TextStyle(color: KeliTheme.accentBright, fontSize: 13, fontWeight: FontWeight.w700, letterSpacing: 0.5),
+                ),
+              ],
             ),
           ),
         ),

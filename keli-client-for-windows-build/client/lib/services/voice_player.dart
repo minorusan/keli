@@ -39,6 +39,12 @@ class VoicePlayer extends ChangeNotifier {
   /// Whether the `:9100` voice socket is connected.
   bool get connected => _connected;
 
+  String _attention = 'idle'; // voice:attention — idle|listening|capturing|processing
+  /// Maradel is hearing you right now (wake/speech onset) — show the "listening" indicator.
+  bool get hearing => _attention == 'capturing';
+  /// Maradel is thinking (deaf, generating the reply) — show the "thinking" indicator.
+  bool get thinking => _attention == 'processing';
+
   /// Count of reply chunks played this session.
   int get played => _played;
 
@@ -75,6 +81,21 @@ class VoicePlayer extends ChangeNotifier {
       } catch (e) {
         AppLog.log('voice', 'setMood send failed: $e');
       }
+    };
+    // Ears/attention state → the on-screen indicator + the face mood. capturing = "hearing you",
+    // processing = "thinking". When she falls back to idle/listening we let the reply emotion own the mood.
+    _voice.onAttention = (state) {
+      if (state == _attention) return;
+      _attention = state;
+      final mood = switch (state) { 'capturing' => 'listening', 'processing' => 'thinking', _ => '' };
+      if (mood.isNotEmpty) {
+        try {
+          sendToUnity('FlutterFace', 'OnMessage', jsonEncode({'type': 'setMood', 'text': mood}));
+        } catch (e) {
+          AppLog.log('voice', 'setMood(attention) send failed: $e');
+        }
+      }
+      notifyListeners();
     };
     _player.onPlayerComplete.listen((_) => _advance());
   }

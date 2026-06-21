@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 61,
+    version: '1.0.61',
+    date: '2026-06-21',
+    title: 'Live chat mirror + listening / thinking indicator',
+    body: '''
+- **The Maradel chat window now shows the conversation you start by VOICE** — your spoken words (STT'd)
+  and Maradel's replies, as read-only bubbles. (It was only following the typed thread before, so spoken
+  turns never appeared.)
+- **Listening / thinking indicator** — a pill at the top of the screen: a pulsing 🎙 **Listening…** the
+  moment Maradel hears you, and a **Thinking…** spinner while she's composing the reply.
+- The **3D face reacts** too: it shifts to a *listening* mood when you speak and a *thinking* mood while
+  she's generating (driven by the new `voice:attention` signal).''',
+  ),
+  ChangelogEntry(
     build: 60,
     version: '1.0.60',
     date: '2026-06-21',

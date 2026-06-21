@@ -30,6 +30,7 @@ class MaradelVoiceClient {
   void Function(bool speaking)? onSpeaking;
   void Function(bool connected)? onConnected;
   void Function(String emotion)? onEmotion;
+  void Function(String state)? onAttention; // voice:attention — idle|listening|capturing|processing
 
   MaradelVoiceClient() {
     _socket = io.io(
@@ -57,6 +58,13 @@ class MaradelVoiceClient {
       if (d is Map) {
         final e = '${d['emotion'] ?? ''}'.trim();
         if (e.isNotEmpty) onEmotion?.call(e);
+      }
+    });
+    // Ears/attention state → the listening / thinking indicator + face mood.
+    _socket.on('voice:attention', (d) {
+      if (d is Map) {
+        final s = '${d['state'] ?? ''}'.trim();
+        if (s.isNotEmpty) onAttention?.call(s);
       }
     });
   }
