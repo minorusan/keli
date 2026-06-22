@@ -24,6 +24,20 @@ class ChangelogEntry {
 
 const List<ChangelogEntry> kChangelog = [
   ChangelogEntry(
+    build: 68,
+    version: '1.0.68',
+    date: '2026-06-22',
+    title: 'Mic noise gate — stop the self-talk',
+    body: '''
+- **The ears now gate out room noise.** The tablet learns the quiet-room level and only streams audio
+  when it clearly hears speech (with a short tail so word-ends aren't clipped) — otherwise it sends
+  silence. This stops Maradel from "talking to herself" when no one's speaking.
+- Turned on the phone's **noise-suppression + echo-cancellation** on the mic capture.
+- The ears status bar now reports how many frames were gated (for tuning).
+- **Diary window**: tolerates alternate fields and no longer shows a raw `[keli_show_diary]` marker /
+  blank page — it shows a clear placeholder when Maradel sends no diary text.''',
+  ),
+  ChangelogEntry(
     build: 67,
     version: '1.0.67',
     date: '2026-06-21',

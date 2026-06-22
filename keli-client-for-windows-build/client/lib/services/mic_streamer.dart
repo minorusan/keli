@@ -52,7 +52,20 @@ class MicStreamer extends ChangeNotifier {
   int _consecutiveFails = 0;
   double _level = 0;
   int _chunksSent = 0;
+  int _chunksGated = 0; // frames replaced with silence by the noise gate (ambient rejected)
   String _detail = 'off';
+
+  // ── client-side noise gate (silence detection) ──
+  // The backend VAD owns speech boundaries, but it was triggering on ambient room noise → Maradel
+  // "talked to herself" with the mic effectively silent. We gate here: learn the room's quiet level
+  // (adaptive floor), and only forward REAL audio when the level clearly exceeds it; otherwise we send
+  // silence (zeros) — same wire-continuous contract as the speaking echo-guard, but the VAD sees nothing
+  // to latch onto. A hangover keeps the gate open briefly after speech so word-ends aren't clipped.
+  double _noiseFloor = 0.02; // adaptive ambient-noise estimate (RMS 0..1), learned while the gate is shut
+  int _gateOpenUntil = 0; // ms timestamp; gate stays open until here (hangover)
+  static const double _gateAbsFloor = 0.012; // never open below this absolute RMS (~ −38 dBFS)
+  static const double _gateRatio = 3.0; // open when level exceeds floor × this
+  static const int _gateHangoverMs = 600; // keep open this long after speech drops
 
   /// Live input level (0..1) of the most recent chunk — drives the VU meter (ValueNotifier so only the
   /// meter repaints).
@@ -161,6 +174,12 @@ class MicStreamer extends ChangeNotifier {
         encoder: AudioEncoder.pcm16bits, // raw s16le — exactly what the backend expects
         sampleRate: 16000,
         numChannels: 1,
+        // Platform DSP: attach the OS noise-suppressor + acoustic-echo-canceller to clean the capture
+        // before it reaches us (helps the self-talk problem at the source). Leave autoGain OFF — AGC
+        // pumps up quiet ambient noise, which would fight our noise gate below.
+        noiseSuppress: true,
+        echoCancel: true,
+        autoGain: false,
         // Force the raw MIC source: the default source returns SILENCE / empty capture on some OEM
         // devices (e.g. LG/Huawei) even with permission granted.
         androidConfig: AndroidRecordConfig(audioSource: AndroidAudioSource.mic),
@@ -213,6 +232,9 @@ class MicStreamer extends ChangeNotifier {
     _level = 0;
     levelVN.value = 0;
     _chunksSent = 0;
+    _chunksGated = 0;
+    _gateOpenUntil = 0;
+    _noiseFloor = 0.02;
     chunksVN.value = 0;
     AppLog.log('mic', 'ears off');
     notifyListeners();
@@ -239,7 +261,23 @@ class MicStreamer extends ChangeNotifier {
       levelVN.value = _level;
       final ws = _ws;
       if (ws == null) return; // not connected yet → drop this slice
-      final out = _maradelSpeaking ? Uint8List(bytes.length) : bytes; // silence while Maradel talks
+
+      // ── noise gate: decide whether this frame is real speech or just the room ──
+      final speech = _level > math.max(_gateAbsFloor, _noiseFloor * _gateRatio);
+      if (speech) {
+        _gateOpenUntil = _lastChunkMs + _gateHangoverMs; // open + extend the hangover
+      } else {
+        // Learn the quiet-room level slowly (EMA) so the gate adapts to ambient noise; clamp to a sane
+        // band so a loud room can't raise the floor past speech, nor a dead-silent one drop it to zero.
+        _noiseFloor = (_noiseFloor * 0.98 + _level * 0.02).clamp(0.004, 0.08);
+      }
+      final gateOpen = _lastChunkMs < _gateOpenUntil;
+
+      // Send silence when Maradel is speaking (echo guard) OR the gate is shut (ambient). Either way the
+      // stream stays wire-continuous; the backend VAD just sees zeros and stays quiet.
+      final mute = _maradelSpeaking || !gateOpen;
+      final out = mute ? Uint8List(bytes.length) : bytes;
+      if (mute && !_maradelSpeaking) _chunksGated++;
       ws.add(out); // binary frame
       _chunksSent++;
       chunksVN.value = _chunksSent;
@@ -255,7 +293,8 @@ class MicStreamer extends ChangeNotifier {
   void _checkStream() {
     if (!_enabled || _disposed) return;
     final since = _lastChunkMs == 0 ? -1 : DateTime.now().millisecondsSinceEpoch - _lastChunkMs;
-    AppLog.log('mic', 'stream health: chunksSent=$_chunksSent sinceLastChunk=${since}ms wsConnected=$_connected');
+    AppLog.log('mic',
+        'stream health: sent=$_chunksSent gated=$_chunksGated floor=${_noiseFloor.toStringAsFixed(3)} sinceLastChunk=${since}ms wsConnected=$_connected');
     if (_gotAudio && since > 4000) {
       AppLog.log('mic', 'recorder stalled (${since}ms no PCM) — restarting capture');
       unawaited(_restartCapture());

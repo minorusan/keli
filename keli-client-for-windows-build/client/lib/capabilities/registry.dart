@@ -24,14 +24,28 @@ final Map<String, CommandViewBuilder> kCommandViews = {
   'show_text': (ctx, cmd, onClose) => ShowTextView(command: cmd, onClose: onClose),
   'show_image': (ctx, cmd, onClose) => ShowImageView(command: cmd, onClose: onClose),
   'show_diary': (ctx, cmd, onClose) => ShowDiaryView(
-        title: cmd.data['title'] ?? '',
-        content: cmd.data['content'] ?? '',
-        claudeActivity: cmd.data['claude_activity'],
+        title: '${cmd.data['title'] ?? ''}',
+        // Tolerate alternate field names from the backend; the diary text has shown up empty / as a bare
+        // "[keli_show_diary]" tool-marker when the expected `content` field wasn't populated.
+        content: _firstNonEmpty([cmd.data['content'], cmd.data['text'], cmd.data['body'], cmd.data['entry']]) ?? '',
+        claudeActivity: _firstNonEmpty([cmd.data['claude_activity'], cmd.data['claudeActivity'], cmd.data['claude']]),
         onClose: onClose,
       ),
 };
 
 List<String> pushEvents() => kCommandViews.keys.toList();
+
+/// First value that is real text — skips nulls, blanks, and bare tool-markers like `[keli_show_diary]`
+/// (which the backend has sent in place of the actual content). Returns null if none qualify.
+String? _firstNonEmpty(List<Object?> values) {
+  final marker = RegExp(r'^\[[a-z0-9_]+\]$', caseSensitive: false);
+  for (final v in values) {
+    final s = '${v ?? ''}'.trim();
+    if (s.isEmpty || marker.hasMatch(s)) continue;
+    return s;
+  }
+  return null;
+}
 
 Widget buildCommandView(BuildContext context, IncomingCommand command, VoidCallback onClose) {
   final builder = kCommandViews[command.event];

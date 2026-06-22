@@ -39,8 +39,10 @@ class ShowDiaryView extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  _page(content),
-                  _page(claudeActivity ?? 'No recent activity.'),
+                  _page(content.trim().isEmpty ? '_Maradel sent no diary text._' : content),
+                  _page((claudeActivity == null || claudeActivity!.trim().isEmpty)
+                      ? '_No recent activity._'
+                      : claudeActivity!),
                 ],
               ),
             ),
